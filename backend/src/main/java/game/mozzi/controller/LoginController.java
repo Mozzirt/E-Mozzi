@@ -23,6 +23,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import static game.mozzi.config.Constants.SERVER_URL;
@@ -30,7 +31,7 @@ import static game.mozzi.config.Constants.SESSION_NAME;
 
 @RestController
 @Slf4j
-@RequestMapping(value = "/member/v1")
+@RequestMapping()
 @Api(tags = {"회원가입 API"})
 @RequiredArgsConstructor
 public class LoginController {
@@ -136,6 +137,14 @@ public class LoginController {
         log.debug("###### kakao login = {}", jo2);
 
         // TODO : 회원가입여부 조회 후 회원가입로직 or 로그인로직
+        UserDto userDto = new UserDto();
+        try{
+            userDto.setSocialId(String.valueOf(jo2.get("id")));
+            userDto.setUserImage(String.valueOf(jo2.getJSONObject("properties").get("profile_image")));
+            this.signUp(userDto);
+        }catch(NoSuchElementException e){
+            log.info("#### Naver login Err = {} ", e);
+        }
 
         return "redirect:/";
     }
@@ -197,6 +206,14 @@ public class LoginController {
 
         // TODO : 회원가입여부 조회 후 회원가입로직 or 로그인로직
 
+        UserDto userDto = new UserDto();
+        try{
+            userDto.setSocialId(String.valueOf(jo2.getJSONObject("response").get("id")));
+            userDto.setUserImage(String.valueOf(jo2.getJSONObject("response").get("profile_image")));
+            userDto.setEmail(String.valueOf(jo2.getJSONObject("response").get("email")));
+        }catch(NoSuchElementException e){
+            log.info("#### Naver login Err = {} ", e);
+        }
         return "redirect:/";
     }
 
@@ -238,9 +255,7 @@ public class LoginController {
         return "redirect:/";
     }
 
-
     @ApiOperation(value = "회원가입",notes = "회원가입 api",response = User.class)
-    @PostMapping(value = "/join")
     public ResponseEntity<?> signUp(@Valid UserDto userDto) {
         User user = userDto.toEntity();
         User userEntity = userService.join(user);
