@@ -19,7 +19,7 @@ import static game.mozzi.config.Constants.SESSION_NAME;
 @Slf4j
 public class LoginCheckFilter implements Filter {
 
-    private static final String[] whitelist = {"/"};
+    private static final String[] whitelist = {"/*"};
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
