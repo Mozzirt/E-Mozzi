@@ -19,19 +19,17 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //번호 증가 전략이 데이터 베이스를 따라 갑니다.
     private Long id; // 서비스 하는 프로그램이 아니라서 int로도 충분함
 
-    @Column(name = "username")
-    private String username;
+    @Column(name = "socialId")
+    private String socialId;
 
     @Column(name = "email")
     private String email;
 
-    @Column(name="password")
-    private String password;
+    @Column(name="userImage")
+    private String userImage;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "nickname")
+    private String nickname;
 
-    @Column(name = "gender")
-    private String gender;
 
 }

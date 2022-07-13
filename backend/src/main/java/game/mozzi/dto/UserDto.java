@@ -9,32 +9,27 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class UserDto {
 
-    @NotBlank
-    @ApiModelProperty(value = "유저 이름" , example = "rkdwlss2")
-    private String username;
+    @ApiModelProperty(value = "닉네임" , example = "nickname")
+    private String nickname;
 
     @NotBlank
-    @ApiModelProperty(value = "비밀번호" , example = "1234")
-    private String password;
+    @ApiModelProperty(value = "소셜 ID" , example = "rkdwlss2")
+    private String socialId;
 
-    @NotBlank
+    @ApiModelProperty(value = "유저이미지" , example = "유저이미지")
+    private String userImage;
+
+
     @ApiModelProperty(value = "이메일" , example = "rkdwlss2@gmail.com")
     private String email;
 
-    @NotBlank
-    @ApiModelProperty(value = "이름" , example = "kangmyoungjin")
-    private String name;
-
-    @ApiModelProperty(value = "성별" , example = "남/여")
-    private String gender;
 
     public User toEntity(){
         return User.builder()
-                .username(username)
-                .password(password)
+                .nickname(nickname)
                 .email(email)
-                .name(name)
-                .gender(gender)
+                .socialId(socialId)
+                .userImage(userImage)
                 .build();
     }
 
