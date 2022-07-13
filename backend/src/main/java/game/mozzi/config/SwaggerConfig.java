@@ -19,16 +19,16 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("mozzi"))
+                .apis(RequestHandlerSelectors.basePackage("game.mozzi"))
                 .paths(PathSelectors.any())
                 .build();
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("v1")
+                .title("E-Mozzi v1")
                 .version("1.0.0")
-                .description("swagger")
+                .description("v1")
                 .build();
     }
 }
