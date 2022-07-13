@@ -15,7 +15,6 @@
 
     <!-- url 별 필터링 룰 선언 -->
     <url-rule-set>
-        <!-- url disable이 true이면 지정한 url 내의 모든 파라메터는 필터링 되지 않는다. -->
         <url-rule>
             <url disable="true">/</url>
         </url-rule>
