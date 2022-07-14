@@ -20,6 +20,7 @@ public final class CommonConstants {
     // 공통
     public static final String MZ_99_0001 = "성공";
     public static final String MZ_99_0002 = "실패";
+    public static final String MZ_99_0003 = "크기초과";
 
     //
     public static final String MZ_00_0001 = "로그인";

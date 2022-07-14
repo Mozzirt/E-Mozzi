@@ -160,10 +160,13 @@ public class LoginController {
                 userDto.setSocialId(String.valueOf(jo2.get("id")));
                 userDto.setUserImage(String.valueOf(jo2.getJSONObject("properties").get("profile_image")));
                 this.signUp(userDto);
+
+                HttpSession session = request.getSession(true);
+                session.setAttribute(SESSION_NAME, String.valueOf(jo2.get("id")));
                 msg.setMessage(StatusEnum.OK, CommonConstants.MZ_00_0002, String.valueOf(jo2.get("id")));
             } catch (NoSuchElementException e) {
                 log.info("#### Naver login Err = {} ", e);
-                msg.setMessage(StatusEnum.INTERNAL_SERVER_ERROR, CommonConstants.MZ_00_0003, String.valueOf(jo2.get("id")));
+                msg.setMessage(StatusEnum.BAD_REQUEST, CommonConstants.MZ_00_0003, String.valueOf(jo2.get("id")));
             }
         }
         return new ResponseEntity<>(msg, HttpStatus.OK);
@@ -238,10 +241,13 @@ public class LoginController {
                 userDto.setUserImage(String.valueOf(jo2.getJSONObject("response").get("profile_image")));
                 userDto.setEmail(String.valueOf(jo2.getJSONObject("response").get("email")));
                 this.signUp(userDto);
+
+                HttpSession session = request.getSession(true);
+                session.setAttribute(SESSION_NAME, String.valueOf(jo2.getJSONObject("response").get("id")));
                 msg.setMessage(StatusEnum.OK, CommonConstants.MZ_00_0002, String.valueOf(jo2.getJSONObject("response").get("id")));
             }catch(NoSuchElementException e){
                 log.info("#### Naver login Err = {} ", e);
-                msg.setMessage(StatusEnum.INTERNAL_SERVER_ERROR, CommonConstants.MZ_00_0003, String.valueOf(jo2.getJSONObject("response").get("id")));
+                msg.setMessage(StatusEnum.BAD_REQUEST, CommonConstants.MZ_00_0003, String.valueOf(jo2.getJSONObject("response").get("id")));
             }
 
         }
