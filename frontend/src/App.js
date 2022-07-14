@@ -1,13 +1,12 @@
-import { Link, Outlet } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 function App() {
   return (
     <div className="App">
       <nav>
-        <header className="App-header"></header>
         <Link to="test">test page</Link>
+        <Link to="login">login page</Link>
       </nav>
-      <Outlet />
     </div>
   );
 }
