@@ -8,7 +8,12 @@ import game.mozzi.domain.user.User;
 import game.mozzi.dto.UserDto;
 import game.mozzi.service.UserService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.Example;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -57,6 +62,38 @@ public class LoginController {
     }
 
     // 로그인 분기
+    @ApiOperation(value="로그인 분기 (API_00_0000) " , notes="로그인 분기한다.") // API - 00 00은 로그인 콘트롤러 0000 은 ID임다
+    @ApiResponses({
+            @ApiResponse(code = 200
+                    /*
+                     * response class가 "List", "Set" , "Map" 일때만, default 빈값 or 삭제
+                     *
+                     * */
+                    , responseContainer = ""
+                    , response = RedirectView.class
+                    , message = "<pre>"
+                    + "Request han been successfully<br/>"
+                    + "{<br/>"
+                    + "  \"data\": {}, <font color=\"red\">data 항목은 Example Value/Model 참고</font><br/>"
+                    + "  \"detailMessage\": \"처리중 오류 발생시 상세 메세지 노출.\",<br/>"
+                    + "  \"resultMessage\": \"정상처리 되었습니다.\",<br/>"
+                    + "  \"statusCode\": 200<br/>"
+                    + "}"
+                    + "</pre>"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 500, message = "An error occurred")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    name = "with"
+                    , value = "guest,kakao,naver"
+                    , required = true
+                    , dataType = "string"
+                    , paramType = "path"
+                    , defaultValue = "guest"
+                    , example = "guest"
+            )
+    })
     @GetMapping("/login/{with}")
     public RedirectView MainLogin(@PathVariable("with") String login_with){
         RedirectView rv = new RedirectView();
@@ -80,6 +117,27 @@ public class LoginController {
     /**
      * GUEST 로그인
      */
+    @ApiOperation(value="GUEST 로그인 (API_00_0001) " , notes="GUEST 로그인한다.") // API - 00 00은 로그인 콘트롤러 0000 은 ID임다
+    @ApiResponses({
+            @ApiResponse(code = 200
+                    /*
+                     * response class가 "List", "Set" , "Map" 일때만, default 빈값 or 삭제
+                     *
+                     * */
+                    , responseContainer = ""
+                    , response = ResponseEntity.class
+                    , message = "<pre>"
+                    + "Request han been successfully<br/>"
+                    + "{<br/>"
+                    + "  \"data\": {}, <font color=\"red\">data 항목은 Example Value/Model 참고</font><br/>"
+                    + "  \"detailMessage\": \"처리중 오류 발생시 상세 메세지 노출.\",<br/>"
+                    + "  \"resultMessage\": \"정상처리 되었습니다.\",<br/>"
+                    + "  \"statusCode\": 200<br/>"
+                    + "}"
+                    + "</pre>"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 500, message = "An error occurred")
+    })
     @RequestMapping(value = "auth/test/callback")
     public ResponseEntity<Message> guestLogin(HttpServletRequest request){
         Message msg = new Message();
@@ -292,7 +350,7 @@ public class LoginController {
         return "ok";
     }
 
-    @ApiOperation(value = "회원가입",notes = "회원가입 api",response = User.class)
+
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@Valid UserDto userDto) {
         User user = userDto.toEntity();
