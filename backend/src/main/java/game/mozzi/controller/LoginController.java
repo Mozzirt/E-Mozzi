@@ -1,6 +1,8 @@
 package game.mozzi.controller;
 
 
+import game.mozzi.config.response.Message;
+import game.mozzi.config.response.StatusEnum;
 import game.mozzi.domain.user.User;
 import game.mozzi.dto.UserDto;
 import game.mozzi.service.UserService;
@@ -78,7 +80,8 @@ public class LoginController {
      * GUEST 로그인
      */
     @RequestMapping(value = "auth/test/callback")
-    public String guestLogin(HttpServletRequest request){
+    public ResponseEntity<Message> guestLogin(HttpServletRequest request){
+        Message msg = new Message();
         String guestUUID = UUID.randomUUID().toString();
         UserDto userDto = new UserDto();
         userDto.setSocialId(guestUUID);
@@ -87,8 +90,8 @@ public class LoginController {
         // GUEST 로그인의 경우 UUID 를 사용하여 socialId에 - 가 들어있음 이걸로 Guest여부 판단가능
         HttpSession session = request.getSession(true);
         session.setAttribute(SESSION_NAME, guestUUID);
-
-        return guestUUID;
+        msg.setMessage(StatusEnum.OK, "게스트로그인", guestUUID);
+        return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
 
@@ -97,8 +100,8 @@ public class LoginController {
      * 카카오 로그인
      */
     @RequestMapping(value = "auth/kakao/callback")
-    public String KakaoLogin(@RequestParam("code") String code ,HttpServletRequest request, Model model){
-
+    public ResponseEntity<Message> KakaoLogin(@RequestParam("code") String code ,HttpServletRequest request, Model model){
+        Message msg = new Message();
         RestTemplate rt = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -149,17 +152,20 @@ public class LoginController {
         if(userYsno){
             HttpSession session = request.getSession(true);
             session.setAttribute(SESSION_NAME, String.valueOf(jo2.get("id")));
+            msg.setMessage(StatusEnum.OK, "로그인", String.valueOf(jo2.get("id")));
         }else {
             try {
                 UserDto userDto = new UserDto();
                 userDto.setSocialId(String.valueOf(jo2.get("id")));
                 userDto.setUserImage(String.valueOf(jo2.getJSONObject("properties").get("profile_image")));
                 this.signUp(userDto);
+                msg.setMessage(StatusEnum.OK, "신규가입", String.valueOf(jo2.get("id")));
             } catch (NoSuchElementException e) {
                 log.info("#### Naver login Err = {} ", e);
+                msg.setMessage(StatusEnum.INTERNAL_SERVER_ERROR, "신규가입오류", String.valueOf(jo2.get("id")));
             }
         }
-        return jo2.toString();
+        return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
 
@@ -168,8 +174,8 @@ public class LoginController {
      * 네이버 로그인
      */
     @RequestMapping(value = "auth/naver/callback")
-    public String NaverLogin(@RequestParam("code") String code, @RequestParam("state") String state, HttpServletRequest request, Model model){
-
+    public ResponseEntity<Message> NaverLogin(@RequestParam("code") String code, @RequestParam("state") String state, HttpServletRequest request, Model model){
+        Message msg = new Message();
         RestTemplate rt = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -223,6 +229,7 @@ public class LoginController {
         if(userYsno){
             HttpSession session = request.getSession(true);
             session.setAttribute(SESSION_NAME, String.valueOf(jo2.getJSONObject("response").get("id")));
+            msg.setMessage(StatusEnum.OK, "로그인", String.valueOf(jo2.getJSONObject("response").get("id")));
         }else{
             try{
                 UserDto userDto = new UserDto();
@@ -230,11 +237,14 @@ public class LoginController {
                 userDto.setUserImage(String.valueOf(jo2.getJSONObject("response").get("profile_image")));
                 userDto.setEmail(String.valueOf(jo2.getJSONObject("response").get("email")));
                 this.signUp(userDto);
+                msg.setMessage(StatusEnum.OK, "신규가입", String.valueOf(jo2.getJSONObject("response").get("id")));
             }catch(NoSuchElementException e){
                 log.info("#### Naver login Err = {} ", e);
+                msg.setMessage(StatusEnum.INTERNAL_SERVER_ERROR, "신규가입오류", String.valueOf(jo2.getJSONObject("response").get("id")));
             }
+
         }
-        return jo2.toString();
+        return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
     /**
