@@ -36,7 +36,7 @@ import static game.mozzi.config.Constants.SESSION_NAME;
 @RestController
 @Slf4j
 @RequestMapping()
-@Api(tags = {"회원가입 API"})
+@Api(tags = {"회원가입/로그인 API"})
 @RequiredArgsConstructor
 public class LoginController {
 
