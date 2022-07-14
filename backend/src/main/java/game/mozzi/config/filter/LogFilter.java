@@ -26,12 +26,12 @@ public class LogFilter implements Filter {
         String requestURI = httpRequest.getRequestURI();
         String uuid = UUID.randomUUID().toString();
         try{
-            log.debug("Logging Filter Req UUID, RequestURI = [{}][{}] ", uuid ,requestURI);
+            log.debug("#### LOGGER Request UUID, UUID = [ {} ] , RequestURI = [ {} ] ", uuid ,requestURI);
             chain.doFilter(request, response);
         }catch(Exception e){
             throw e;
         }finally {
-            log.debug("Logging Filter Res UUID, RequestURI = [{}][{}] " , uuid,requestURI);
+            log.debug("#### LOGGER Result UUID, UUID = [ {} ] , RequestURI = [ {} ] " , uuid,requestURI);
         }
     }
 }

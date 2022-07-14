@@ -1,6 +1,7 @@
 package game.mozzi.controller;
 
 
+import game.mozzi.config.response.CommonConstants;
 import game.mozzi.config.response.Message;
 import game.mozzi.config.response.StatusEnum;
 import game.mozzi.domain.user.User;
@@ -90,7 +91,7 @@ public class LoginController {
         // GUEST 로그인의 경우 UUID 를 사용하여 socialId에 - 가 들어있음 이걸로 Guest여부 판단가능
         HttpSession session = request.getSession(true);
         session.setAttribute(SESSION_NAME, guestUUID);
-        msg.setMessage(StatusEnum.OK, "게스트로그인", guestUUID);
+        msg.setMessage(StatusEnum.OK, CommonConstants.MZ_00_0004, guestUUID);
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
@@ -152,17 +153,17 @@ public class LoginController {
         if(userYsno){
             HttpSession session = request.getSession(true);
             session.setAttribute(SESSION_NAME, String.valueOf(jo2.get("id")));
-            msg.setMessage(StatusEnum.OK, "로그인", String.valueOf(jo2.get("id")));
+            msg.setMessage(StatusEnum.OK, CommonConstants.MZ_00_0001, String.valueOf(jo2.get("id")));
         }else {
             try {
                 UserDto userDto = new UserDto();
                 userDto.setSocialId(String.valueOf(jo2.get("id")));
                 userDto.setUserImage(String.valueOf(jo2.getJSONObject("properties").get("profile_image")));
                 this.signUp(userDto);
-                msg.setMessage(StatusEnum.OK, "신규가입", String.valueOf(jo2.get("id")));
+                msg.setMessage(StatusEnum.OK, CommonConstants.MZ_00_0002, String.valueOf(jo2.get("id")));
             } catch (NoSuchElementException e) {
                 log.info("#### Naver login Err = {} ", e);
-                msg.setMessage(StatusEnum.INTERNAL_SERVER_ERROR, "신규가입오류", String.valueOf(jo2.get("id")));
+                msg.setMessage(StatusEnum.INTERNAL_SERVER_ERROR, CommonConstants.MZ_00_0003, String.valueOf(jo2.get("id")));
             }
         }
         return new ResponseEntity<>(msg, HttpStatus.OK);
@@ -229,7 +230,7 @@ public class LoginController {
         if(userYsno){
             HttpSession session = request.getSession(true);
             session.setAttribute(SESSION_NAME, String.valueOf(jo2.getJSONObject("response").get("id")));
-            msg.setMessage(StatusEnum.OK, "로그인", String.valueOf(jo2.getJSONObject("response").get("id")));
+            msg.setMessage(StatusEnum.OK, CommonConstants.MZ_00_0001, String.valueOf(jo2.getJSONObject("response").get("id")));
         }else{
             try{
                 UserDto userDto = new UserDto();
@@ -237,10 +238,10 @@ public class LoginController {
                 userDto.setUserImage(String.valueOf(jo2.getJSONObject("response").get("profile_image")));
                 userDto.setEmail(String.valueOf(jo2.getJSONObject("response").get("email")));
                 this.signUp(userDto);
-                msg.setMessage(StatusEnum.OK, "신규가입", String.valueOf(jo2.getJSONObject("response").get("id")));
+                msg.setMessage(StatusEnum.OK, CommonConstants.MZ_00_0002, String.valueOf(jo2.getJSONObject("response").get("id")));
             }catch(NoSuchElementException e){
                 log.info("#### Naver login Err = {} ", e);
-                msg.setMessage(StatusEnum.INTERNAL_SERVER_ERROR, "신규가입오류", String.valueOf(jo2.getJSONObject("response").get("id")));
+                msg.setMessage(StatusEnum.INTERNAL_SERVER_ERROR, CommonConstants.MZ_00_0003, String.valueOf(jo2.getJSONObject("response").get("id")));
             }
 
         }
