@@ -286,6 +286,7 @@ public class LoginController {
     }
 
     @ApiOperation(value = "회원가입",notes = "회원가입 api",response = User.class)
+    @PostMapping("/signup")
     public ResponseEntity<?> signUp(@Valid UserDto userDto) {
         User user = userDto.toEntity();
         User userEntity = userService.join(user);
