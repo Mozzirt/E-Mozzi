@@ -1,6 +1,7 @@
 package game.mozzi.controller;
 
 import game.mozzi.config.S3Uploader;
+import game.mozzi.config.response.CommonConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +11,6 @@ import java.io.IOException;
 import java.util.UUID;
 
 import static game.mozzi.config.Constants.FILE_MAX_SIZE;
-import static game.mozzi.config.Constants.SESSION_NAME;
 
 
 /**
@@ -30,7 +30,7 @@ public class S3Controller {
     public String upload(@RequestParam("data") MultipartFile multipartFile) throws IOException {
         // 파일크기 9M 이상일경우
         if(multipartFile.getSize() > FILE_MAX_SIZE) {
-            return "크기초과";
+            return CommonConstants.MZ_99_0003;
         }
         String fileUuid = UUID.randomUUID().toString();
         return s3Uploader.uploadConvert(multipartFile, "static" ,fileUuid);
