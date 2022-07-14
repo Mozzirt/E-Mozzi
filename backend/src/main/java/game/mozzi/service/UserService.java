@@ -13,6 +13,11 @@ public class UserService {
 
     private final UserInfoRepository userInfoRepository;
 
+    /**
+     * 회원가입
+     * @param user
+     * @return
+     */
     @Transactional
     public User join(User user){
 
@@ -21,5 +26,14 @@ public class UserService {
         }
         User userEntity = userInfoRepository.save(user);
         return userEntity;
+    }
+
+    /**
+     * 회원여부 찾기
+     * @param socialId
+     * @return
+     */
+    public boolean findUser(String socialId){
+        return userInfoRepository.existsBySocialId(socialId);
     }
 }

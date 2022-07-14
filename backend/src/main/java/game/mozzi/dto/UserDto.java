@@ -19,10 +19,8 @@ public class UserDto {
     @ApiModelProperty(value = "유저이미지" , example = "유저이미지")
     private String userImage;
 
-
     @ApiModelProperty(value = "이메일" , example = "rkdwlss2@gmail.com")
     private String email;
-
 
     public User toEntity(){
         return User.builder()
