@@ -80,7 +80,7 @@ public class LoginController {
     public String guestLogin(HttpServletRequest request, Model model){
         String guestUUID = UUID.randomUUID().toString();
         // TODO : 게스트 로그인로직 구현
-        return "redirect:/";
+        return guestUUID;
     }
 
 
@@ -146,7 +146,7 @@ public class LoginController {
             log.info("#### Naver login Err = {} ", e);
         }
 
-        return "redirect:/";
+        return "jo2";
     }
 
 
@@ -214,7 +214,7 @@ public class LoginController {
         }catch(NoSuchElementException e){
             log.info("#### Naver login Err = {} ", e);
         }
-        return "redirect:/";
+        return "jo2";
     }
 
     /**
@@ -230,7 +230,7 @@ public class LoginController {
         if(session != null){
             session.invalidate();
         }
-        return "redirect:/";
+        return "ok";
     }
 
     /**
@@ -243,7 +243,7 @@ public class LoginController {
     public String guestLogout(@SessionAttribute(name= SESSION_NAME, required = false) String socialId, HttpServletRequest request) {
 
         if(socialId.replaceAll("-","").equals(socialId)){
-            return "redirect:/";
+            return "guest";
         }
 
         HttpSession session = request.getSession(false);
@@ -252,7 +252,7 @@ public class LoginController {
         if (session != null) {
             session.invalidate();
         }
-        return "redirect:/";
+        return "ok";
     }
 
     @ApiOperation(value = "회원가입",notes = "회원가입 api",response = User.class)
