@@ -12,13 +12,20 @@ package game.mozzi.config.response;
  *     01 :
  *     02 :
  *     03 :
+ *     99 : 공통
  * }
  */
 public final class CommonConstants {
 
+    // 공통
+    public static final String MZ_99_0001 = "성공";
+    public static final String MZ_99_0002 = "실패";
+
+    //
     public static final String MZ_00_0001 = "로그인";
     public static final String MZ_00_0002 = "회원가입";
     public static final String MZ_00_0003 = "회원가입 실패";
     public static final String MZ_00_0004 = "게스트 로그인";
+
 
 }
