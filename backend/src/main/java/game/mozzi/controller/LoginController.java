@@ -23,6 +23,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.sql.SQLException;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -58,7 +59,7 @@ public class LoginController {
         RedirectView rv = new RedirectView();
         switch (login_with){
             case "guest":
-                rv.setUrl("https://santa-community.co.kr/auth/test/callback");
+                rv.setUrl("http://localhost:8080/auth/test/callback");
                 break;
             case "kakao":
                 rv.setUrl("https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="+ kakao_rest +"&redirect_uri="+SERVER_URL+"/auth/kakao/callback");
@@ -77,10 +78,17 @@ public class LoginController {
      * GUEST 로그인
      */
     @RequestMapping(value = "auth/test/callback")
-    public String guestLogin(HttpServletRequest request, Model model){
+    public String guestLogin(HttpServletRequest request){
         String guestUUID = UUID.randomUUID().toString();
-        // TODO : 게스트 로그인로직 구현
-        return "redirect:/";
+        UserDto userDto = new UserDto();
+        userDto.setSocialId(guestUUID);
+        this.signUp(userDto);
+
+        // GUEST 로그인의 경우 UUID 를 사용하여 socialId에 - 가 들어있음 이걸로 Guest여부 판단가능
+        HttpSession session = request.getSession(true);
+        session.setAttribute(SESSION_NAME, guestUUID);
+
+        return guestUUID;
     }
 
 
@@ -90,7 +98,6 @@ public class LoginController {
      */
     @RequestMapping(value = "auth/kakao/callback")
     public String KakaoLogin(@RequestParam("code") String code ,HttpServletRequest request, Model model){
-
 
         RestTemplate rt = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -136,17 +143,23 @@ public class LoginController {
         JSONObject jo2 = new JSONObject(response2.getBody());
         log.debug("###### kakao login = {}", jo2);
 
-        // TODO : 회원가입여부 조회 후 회원가입로직 or 로그인로직
-        UserDto userDto = new UserDto();
-        try{
-            userDto.setSocialId(String.valueOf(jo2.get("id")));
-            userDto.setUserImage(String.valueOf(jo2.getJSONObject("properties").get("profile_image")));
-            this.signUp(userDto);
-        }catch(NoSuchElementException e){
-            log.info("#### Naver login Err = {} ", e);
-        }
+        boolean userYsno = userService.findUser(String.valueOf(jo2.get("id")));
 
-        return "redirect:/";
+        // 회원인경우
+        if(userYsno){
+            HttpSession session = request.getSession(true);
+            session.setAttribute(SESSION_NAME, String.valueOf(jo2.get("id")));
+        }else {
+            try {
+                UserDto userDto = new UserDto();
+                userDto.setSocialId(String.valueOf(jo2.get("id")));
+                userDto.setUserImage(String.valueOf(jo2.getJSONObject("properties").get("profile_image")));
+                this.signUp(userDto);
+            } catch (NoSuchElementException e) {
+                log.info("#### Naver login Err = {} ", e);
+            }
+        }
+        return jo2.toString();
     }
 
 
@@ -183,7 +196,6 @@ public class LoginController {
         // 토큰결과값
         log.debug("naver Id token result = {} " ,  response);
 
-
         RestTemplate rt2 = new RestTemplate();
         HttpHeaders headers2 = new HttpHeaders();
 
@@ -203,18 +215,26 @@ public class LoginController {
         JSONObject jo2 = new JSONObject(response2.getBody());
 
         log.debug("##### naver login = {}" , jo2);
+        log.info(String.valueOf(jo2.getJSONObject("response").get("id")));
 
-        // TODO : 회원가입여부 조회 후 회원가입로직 or 로그인로직
+        boolean userYsno = userService.findUser(String.valueOf(jo2.getJSONObject("response").get("id")));
 
-        UserDto userDto = new UserDto();
-        try{
-            userDto.setSocialId(String.valueOf(jo2.getJSONObject("response").get("id")));
-            userDto.setUserImage(String.valueOf(jo2.getJSONObject("response").get("profile_image")));
-            userDto.setEmail(String.valueOf(jo2.getJSONObject("response").get("email")));
-        }catch(NoSuchElementException e){
-            log.info("#### Naver login Err = {} ", e);
+        // 회원인경우
+        if(userYsno){
+            HttpSession session = request.getSession(true);
+            session.setAttribute(SESSION_NAME, String.valueOf(jo2.getJSONObject("response").get("id")));
+        }else{
+            try{
+                UserDto userDto = new UserDto();
+                userDto.setSocialId(String.valueOf(jo2.getJSONObject("response").get("id")));
+                userDto.setUserImage(String.valueOf(jo2.getJSONObject("response").get("profile_image")));
+                userDto.setEmail(String.valueOf(jo2.getJSONObject("response").get("email")));
+                this.signUp(userDto);
+            }catch(NoSuchElementException e){
+                log.info("#### Naver login Err = {} ", e);
+            }
         }
-        return "redirect:/";
+        return jo2.toString();
     }
 
     /**
@@ -230,7 +250,7 @@ public class LoginController {
         if(session != null){
             session.invalidate();
         }
-        return "redirect:/";
+        return "ok";
     }
 
     /**
@@ -252,7 +272,7 @@ public class LoginController {
         if (session != null) {
             session.invalidate();
         }
-        return "redirect:/";
+        return "ok";
     }
 
     @ApiOperation(value = "회원가입",notes = "회원가입 api",response = User.class)
