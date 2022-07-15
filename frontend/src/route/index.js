@@ -3,7 +3,7 @@ import 'App.css'
 
 import App from 'App'
 
-import Test from 'component/Test'
+import Test from 'page/Test'
 
 export default function Router() {
     return (
