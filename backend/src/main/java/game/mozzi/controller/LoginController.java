@@ -1,11 +1,19 @@
 package game.mozzi.controller;
 
 
+import game.mozzi.config.response.CommonConstants;
+import game.mozzi.config.response.Message;
+import game.mozzi.config.response.StatusEnum;
 import game.mozzi.domain.user.User;
 import game.mozzi.dto.UserDto;
 import game.mozzi.service.UserService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.Example;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -23,6 +31,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.sql.SQLException;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -32,7 +41,7 @@ import static game.mozzi.config.Constants.SESSION_NAME;
 @RestController
 @Slf4j
 @RequestMapping()
-@Api(tags = {"회원가입 API"})
+@Api(tags = {"회원가입/로그인 API"})
 @RequiredArgsConstructor
 public class LoginController {
 
@@ -53,12 +62,44 @@ public class LoginController {
     }
 
     // 로그인 분기
+    @ApiOperation(value="로그인 분기 (API_00_0000) " , notes="로그인 분기한다.") // API - 00 00은 로그인 콘트롤러 0000 은 ID임다
+    @ApiResponses({
+            @ApiResponse(code = 200
+                    /*
+                     * response class가 "List", "Set" , "Map" 일때만, default 빈값 or 삭제
+                     *
+                     * */
+                    , responseContainer = ""
+                    , response = RedirectView.class
+                    , message = "<pre>"
+                    + "Request han been successfully<br/>"
+                    + "{<br/>"
+                    + "  \"data\": {}, <font color=\"red\">data 항목은 Example Value/Model 참고</font><br/>"
+                    + "  \"detailMessage\": \"처리중 오류 발생시 상세 메세지 노출.\",<br/>"
+                    + "  \"resultMessage\": \"정상처리 되었습니다.\",<br/>"
+                    + "  \"statusCode\": 200<br/>"
+                    + "}"
+                    + "</pre>"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 500, message = "An error occurred")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    name = "with"
+                    , value = "guest,kakao,naver"
+                    , required = true
+                    , dataType = "string"
+                    , paramType = "path"
+                    , defaultValue = "guest"
+                    , example = "guest"
+            )
+    })
     @GetMapping("/login/{with}")
     public RedirectView MainLogin(@PathVariable("with") String login_with){
         RedirectView rv = new RedirectView();
         switch (login_with){
             case "guest":
-                rv.setUrl("https://santa-community.co.kr/auth/test/callback");
+                rv.setUrl("http://localhost:8080/auth/test/callback");
                 break;
             case "kakao":
                 rv.setUrl("https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="+ kakao_rest +"&redirect_uri="+SERVER_URL+"/auth/kakao/callback");
@@ -76,11 +117,40 @@ public class LoginController {
     /**
      * GUEST 로그인
      */
+    @ApiOperation(value="GUEST 로그인 (API_00_0001) " , notes="GUEST 로그인한다.") // API - 00 00은 로그인 콘트롤러 0000 은 ID임다
+    @ApiResponses({
+            @ApiResponse(code = 200
+                    /*
+                     * response class가 "List", "Set" , "Map" 일때만, default 빈값 or 삭제
+                     *
+                     * */
+                    , responseContainer = ""
+                    , response = ResponseEntity.class
+                    , message = "<pre>"
+                    + "Request han been successfully<br/>"
+                    + "{<br/>"
+                    + "  \"data\": {}, <font color=\"red\">data 항목은 Example Value/Model 참고</font><br/>"
+                    + "  \"detailMessage\": \"처리중 오류 발생시 상세 메세지 노출.\",<br/>"
+                    + "  \"resultMessage\": \"정상처리 되었습니다.\",<br/>"
+                    + "  \"statusCode\": 200<br/>"
+                    + "}"
+                    + "</pre>"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 500, message = "An error occurred")
+    })
     @RequestMapping(value = "auth/test/callback")
-    public String guestLogin(HttpServletRequest request, Model model){
+    public ResponseEntity<Message> guestLogin(HttpServletRequest request){
+        Message msg = new Message();
         String guestUUID = UUID.randomUUID().toString();
-        // TODO : 게스트 로그인로직 구현
-        return guestUUID;
+        UserDto userDto = new UserDto();
+        userDto.setSocialId(guestUUID);
+        this.signUp(userDto);
+
+        // GUEST 로그인의 경우 UUID 를 사용하여 socialId에 - 가 들어있음 이걸로 Guest여부 판단가능
+        HttpSession session = request.getSession(true);
+        session.setAttribute(SESSION_NAME, guestUUID);
+        msg.setMessage(StatusEnum.OK, CommonConstants.MZ_00_0004, guestUUID);
+        return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
 
@@ -89,9 +159,8 @@ public class LoginController {
      * 카카오 로그인
      */
     @RequestMapping(value = "auth/kakao/callback")
-    public String KakaoLogin(@RequestParam("code") String code ,HttpServletRequest request, Model model){
-
-
+    public ResponseEntity<Message> KakaoLogin(@RequestParam("code") String code ,HttpServletRequest request, Model model){
+        Message msg = new Message();
         RestTemplate rt = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -136,17 +205,29 @@ public class LoginController {
         JSONObject jo2 = new JSONObject(response2.getBody());
         log.debug("###### kakao login = {}", jo2);
 
-        // TODO : 회원가입여부 조회 후 회원가입로직 or 로그인로직
-        UserDto userDto = new UserDto();
-        try{
-            userDto.setSocialId(String.valueOf(jo2.get("id")));
-            userDto.setUserImage(String.valueOf(jo2.getJSONObject("properties").get("profile_image")));
-            this.signUp(userDto);
-        }catch(NoSuchElementException e){
-            log.info("#### Naver login Err = {} ", e);
-        }
+        boolean userYsno = userService.findUser(String.valueOf(jo2.get("id")));
 
-        return "jo2";
+        // 회원인경우
+        if(userYsno){
+            HttpSession session = request.getSession(true);
+            session.setAttribute(SESSION_NAME, String.valueOf(jo2.get("id")));
+            msg.setMessage(StatusEnum.OK, CommonConstants.MZ_00_0001, String.valueOf(jo2.get("id")));
+        }else {
+            try {
+                UserDto userDto = new UserDto();
+                userDto.setSocialId(String.valueOf(jo2.get("id")));
+                userDto.setUserImage(String.valueOf(jo2.getJSONObject("properties").get("profile_image")));
+                this.signUp(userDto);
+
+                HttpSession session = request.getSession(true);
+                session.setAttribute(SESSION_NAME, String.valueOf(jo2.get("id")));
+                msg.setMessage(StatusEnum.OK, CommonConstants.MZ_00_0002, String.valueOf(jo2.get("id")));
+            } catch (NoSuchElementException e) {
+                log.info("#### Naver login Err = {} ", e);
+                msg.setMessage(StatusEnum.BAD_REQUEST, CommonConstants.MZ_00_0003, String.valueOf(jo2.get("id")));
+            }
+        }
+        return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
 
@@ -155,8 +236,8 @@ public class LoginController {
      * 네이버 로그인
      */
     @RequestMapping(value = "auth/naver/callback")
-    public String NaverLogin(@RequestParam("code") String code, @RequestParam("state") String state, HttpServletRequest request, Model model){
-
+    public ResponseEntity<Message> NaverLogin(@RequestParam("code") String code, @RequestParam("state") String state, HttpServletRequest request, Model model){
+        Message msg = new Message();
         RestTemplate rt = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -183,7 +264,6 @@ public class LoginController {
         // 토큰결과값
         log.debug("naver Id token result = {} " ,  response);
 
-
         RestTemplate rt2 = new RestTemplate();
         HttpHeaders headers2 = new HttpHeaders();
 
@@ -203,18 +283,33 @@ public class LoginController {
         JSONObject jo2 = new JSONObject(response2.getBody());
 
         log.debug("##### naver login = {}" , jo2);
+        log.info(String.valueOf(jo2.getJSONObject("response").get("id")));
 
-        // TODO : 회원가입여부 조회 후 회원가입로직 or 로그인로직
+        boolean userYsno = userService.findUser(String.valueOf(jo2.getJSONObject("response").get("id")));
 
-        UserDto userDto = new UserDto();
-        try{
-            userDto.setSocialId(String.valueOf(jo2.getJSONObject("response").get("id")));
-            userDto.setUserImage(String.valueOf(jo2.getJSONObject("response").get("profile_image")));
-            userDto.setEmail(String.valueOf(jo2.getJSONObject("response").get("email")));
-        }catch(NoSuchElementException e){
-            log.info("#### Naver login Err = {} ", e);
+        // 회원인경우
+        if(userYsno){
+            HttpSession session = request.getSession(true);
+            session.setAttribute(SESSION_NAME, String.valueOf(jo2.getJSONObject("response").get("id")));
+            msg.setMessage(StatusEnum.OK, CommonConstants.MZ_00_0001, String.valueOf(jo2.getJSONObject("response").get("id")));
+        }else{
+            try{
+                UserDto userDto = new UserDto();
+                userDto.setSocialId(String.valueOf(jo2.getJSONObject("response").get("id")));
+                userDto.setUserImage(String.valueOf(jo2.getJSONObject("response").get("profile_image")));
+                userDto.setEmail(String.valueOf(jo2.getJSONObject("response").get("email")));
+                this.signUp(userDto);
+
+                HttpSession session = request.getSession(true);
+                session.setAttribute(SESSION_NAME, String.valueOf(jo2.getJSONObject("response").get("id")));
+                msg.setMessage(StatusEnum.OK, CommonConstants.MZ_00_0002, String.valueOf(jo2.getJSONObject("response").get("id")));
+            }catch(NoSuchElementException e){
+                log.info("#### Naver login Err = {} ", e);
+                msg.setMessage(StatusEnum.BAD_REQUEST, CommonConstants.MZ_00_0003, String.valueOf(jo2.getJSONObject("response").get("id")));
+            }
+
         }
-        return "jo2";
+        return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
     /**
@@ -255,7 +350,8 @@ public class LoginController {
         return "ok";
     }
 
-    @ApiOperation(value = "회원가입",notes = "회원가입 api",response = User.class)
+
+    @PostMapping("/signup")
     public ResponseEntity<?> signUp(@Valid UserDto userDto) {
         User user = userDto.toEntity();
         User userEntity = userService.join(user);

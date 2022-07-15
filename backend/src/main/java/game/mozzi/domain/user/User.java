@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //번호 증가 전략이 데이터 베이스를 따라 갑니다.
-    private Long id; // 서비스 하는 프로그램이 아니라서 int로도 충분함
+    private Long userNum;
 
     @Column(name = "socialId")
     private String socialId;
