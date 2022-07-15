@@ -338,7 +338,7 @@ public class LoginController {
     public String guestLogout(@SessionAttribute(name= SESSION_NAME, required = false) String socialId, HttpServletRequest request) {
 
         if(socialId.replaceAll("-","").equals(socialId)){
-            return "redirect:/";
+            return "guest";
         }
 
         HttpSession session = request.getSession(false);
