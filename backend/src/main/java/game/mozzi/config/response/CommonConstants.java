@@ -21,12 +21,14 @@ public final class CommonConstants {
     public static final String MZ_99_0001 = "성공";
     public static final String MZ_99_0002 = "실패";
     public static final String MZ_99_0003 = "크기초과";
+    public static final String MZ_99_0004 = "데이터가 존재하지 않습니다";
 
-    //
+    // 회원
     public static final String MZ_00_0001 = "로그인";
     public static final String MZ_00_0002 = "회원가입";
     public static final String MZ_00_0003 = "회원가입 실패";
     public static final String MZ_00_0004 = "게스트 로그인";
+    public static final String MZ_00_0005 = "권한이 없습니다";
 
 
 }

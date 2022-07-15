@@ -1,7 +1,7 @@
 package game.mozzi.service;
 
 import game.mozzi.domain.user.User;
-import game.mozzi.domain.user.UserInfoRepository;
+import game.mozzi.domain.repository.UserInfoRepository;
 import game.mozzi.handler.ex.CustomValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,4 +36,14 @@ public class UserService {
     public boolean findUser(String socialId){
         return userInfoRepository.existsBySocialId(socialId);
     }
+
+    /**
+     * 회원조회 ( 소셜아이디 )
+     * @param socialId
+     * @return
+     */
+    public User findUserBySocialId(String socialId){
+        return userInfoRepository.findBySocialId(socialId);
+    }
+
 }
