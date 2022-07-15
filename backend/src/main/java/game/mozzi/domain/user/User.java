@@ -1,6 +1,7 @@
 package game.mozzi.domain.user;
 
 import game.mozzi.domain.BaseTimeEntity;
+import game.mozzi.domain.question.Question;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,6 +31,9 @@ public class User extends BaseTimeEntity {
 
     @Column(name = "nickname")
     private String nickname;
+
+    @OneToOne(mappedBy = "user")
+    private Question question;
 
 
 }
