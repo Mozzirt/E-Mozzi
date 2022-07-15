@@ -18,10 +18,10 @@ public class Follow extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long followNum;
 
-    @Column(name = "socialId")
+    @Column(name = "follower")
     private String follower;
 
-    @Column(name = "email")
+    @Column(name = "following")
     private String following;
 
 }
