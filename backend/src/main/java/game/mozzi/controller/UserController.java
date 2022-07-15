@@ -36,12 +36,13 @@ import static game.mozzi.config.Constants.SESSION_NAME;
 
 @RestController
 @Slf4j
-@RequestMapping("/user")
-@Api(tags = {"회원 API"})
+@RequestMapping("/api/v1/user")
+@Api(tags = {"USER API"})
 @RequiredArgsConstructor
 public class UserController {
 
     private final SessionListener sessionListener;
+    private final UserService userService;
 
     @GetMapping("/session/count")
     @ApiOperation(value = "로그인유저 수 조회",notes = "로그인유저 수 조회")
@@ -57,11 +58,23 @@ public class UserController {
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
-    @GetMapping("/socialId")
+    @GetMapping("/find/login")
     @ApiOperation(value = "접속중인유저 조회",notes = "접속중인유저 조회")
     public ResponseEntity<Message> currentUserId(@SessionAttribute(name= SESSION_NAME, required = false) String socialId, Message msg){
         msg.setMessage(StatusEnum.OK, CommonConstants.MZ_99_0001, socialId);
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
+
+    @GetMapping("/find")
+    @ApiOperation(value = "유저정보조회",notes = "유저정보조회")
+    public ResponseEntity<Message> findUserBySocialId(@SessionAttribute(name= SESSION_NAME, required = false) String socialId, Message msg){
+        if(socialId == null){
+            msg.setMessage(StatusEnum.UNAUTHORIZED, CommonConstants.MZ_00_0005, "");
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+        }
+        msg.setMessage(StatusEnum.OK, CommonConstants.MZ_99_0001, userService.findUserBySocialId(socialId));
+        return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
+
 }
 
