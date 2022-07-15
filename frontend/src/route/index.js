@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import '../App.css'
+import 'App.css'
 
-import App from '../App'
+import App from 'App'
 
-import Test from '../component/Test'
+import Test from 'component/Test'
 
 export default function Router() {
     return (
