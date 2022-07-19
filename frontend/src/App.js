@@ -1,14 +1,12 @@
-import { Link } from 'react-router-dom'
+import './App.css'
+import EMozzi from 'Routes/EMozzi'
 
 function App() {
   return (
-    <div className="App">
-      <nav>
-        <Link to="test">test page</Link>
-        <Link to="login">login page</Link>
-      </nav>
+    <div>
+      <EMozzi />
     </div>
-  );
+  )
 }
 
 export default App
