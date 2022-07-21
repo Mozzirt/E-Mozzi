@@ -13,7 +13,6 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.Example;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -31,7 +30,6 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.sql.SQLException;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -359,4 +357,5 @@ public class LoginController {
     }
 
 }
+
 
