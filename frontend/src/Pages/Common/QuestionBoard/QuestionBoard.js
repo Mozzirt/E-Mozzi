@@ -23,7 +23,13 @@ class QuestionBoard extends Component {
         <div className="question-info">
           <div className="info-left">
             <div className="info-img">
-              <img src={imgUrl} alt="" />
+              {
+                imgUrl
+                ?
+                <img src={imgUrl} alt="" />
+                :
+                null
+              }
             </div>
             <div className="info-content">
               <div className="title">{nickname}</div>
