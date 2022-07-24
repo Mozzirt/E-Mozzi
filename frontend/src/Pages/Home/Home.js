@@ -10,7 +10,7 @@ class Home extends Component {
     super(props)
     this.state = {
       isSearchMode: false,
-      isHeartClicked: false,
+      search: ''
     }
   }
   slickRef
@@ -22,8 +22,11 @@ class Home extends Component {
     const { isSearchMode } = this.state
     this.setState({ isSearchMode: !isSearchMode })
   }
+  handleChangeSearch = (e) => {
+    this.setState({ search: e.target.value})
+  }
   render() {
-    const { isHeartClicked, isSearchMode } = this.state
+    const { isSearchMode, search } = this.state
     const sliderSettings = {
       dots: true,
       infinite: true,
@@ -48,7 +51,9 @@ class Home extends Component {
             isSearchMode
               ?
               <div className="search-area">
-                  <input />
+                  <input type="text" placeholder="검색단어" value={search} onChange={this.handleChangeSearch} />
+                  <div className="search-btn"><img src='/images/home/search.svg' alt=''/></div>
+                  <div className="cancel-btn" onClick={this.handleClickSearch}>취소</div>
               </div>
               :
               <div className="filter-area">
@@ -58,7 +63,7 @@ class Home extends Component {
                   <div>그룹2</div>
                 </div>
                 <div className="filter-img-area">
-                  <img src="/images/home/search.png" alt="" onClick={this.handleClickSearch} />
+                  <img src="/images/home/search.svg" alt="" onClick={this.handleClickSearch} />
                 </div>
               </div>
           }
