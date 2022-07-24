@@ -3,9 +3,8 @@ import "./Home.scss";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-// import { Input, InputGroup, InputLeftElement } from '@chakra-ui/react'
-// import { SearchIcon } from '@chakra-ui/icons'
-import SeachBar from "./SearchBar/SearchBar";
+
+import QuestionBoard from "Pages/Common/QuestionBoard/QuestionBoard";
 class Home extends Component {
   constructor(props) {
     super(props)
@@ -49,22 +48,7 @@ class Home extends Component {
             isSearchMode
               ?
               <div className="search-area">
-                  <SeachBar/>
-                {/* <InputGroup>
-                    <InputLeftElement
-                    pointerEvents='none'
-                    children={<SearchIcon color='gray.300' />}
-                    />
-                    <Input type='tel' placeholder='Phone number' />
-                </InputGroup> */}
-                {/* <InputGroup className='input-group' display="flex" flexDirection="row">
-                  <InputLeftElement
-                    className='input-img'
-                    pointerEvents="none"
-                    children={<SearchIcon color="blue.300" />}
-                  />
-                  <Input className='input' variant="outline" placeholder='검색단어' />
-                </InputGroup> */}
+                  <input />
               </div>
               :
               <div className="filter-area">
@@ -88,39 +72,14 @@ class Home extends Component {
               <div className="slide-list" style={{ width: 300 }}></div>
             </Slider>
           </div>
-          <div className="question-area">
-            <div className="question-info">
-              <div className="info-left">
-                <div className="info-img"><img src='' alt='' /></div>
-                <div className="info-content">
-                  <div className="title">저건모야</div>
-                  <div className="hashtag">#OOTD #나의질문</div>
-                </div>
-              </div>
-              <div className="info-right">
-                <div className="count-img"><img src='/images/home/question-count.png' alt='' /></div>
-                <div className="count">10문제</div>
-              </div>
-            </div>
-            <div className="question-body">
-              <div>내가 지금 먹고 싶은 것을 맞추시오</div>
-            </div>
-            <div className="question-heart" onClick={this.handleClickHeart} >
-              {
-                isHeartClicked
-                  ?
-                  <>
-                    <img src='/images/home/fill-heart.svg' alt='' />
-                    <span>1</span>
-                  </>
-                  :
-                  <>
-                    <img src='/images/home/heart.svg' alt='' />
-                    <span>0</span>
-                  </>
-              }
-            </div>
-          </div>
+          <QuestionBoard
+            nickname={"저건모야"}
+            hashtag={'#OOTD #나의질문'}
+            count={10}
+            title={"내가 지금 먹고 싶은 것을 맞추시오"}
+            heart={1}
+            imgUrl={''}
+          />
         </div>
       </div>
     )
