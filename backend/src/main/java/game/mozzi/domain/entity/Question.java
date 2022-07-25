@@ -43,24 +43,6 @@ public class Question extends BaseTimeEntity {
     @Column(name = "image_url1")
     private String imageUrl1;
 
-    @Column(name = "image_url2")
-    private String imageUrl2;
-
-    @Column(name = "image_url3")
-    private String imageUrl3;
-
-    @Column(name = "image_url4")
-    private String imageUrl4;
-
-    @Column(name = "image_url5")
-    private String imageUrl5;
-
-    @Column(name = "image_url6")
-    private String imageUrl6;
-
-    @Column(name = "image_url7")
-    private String imageUrl7;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "questionListNum")
     private QuestionList questionListNum;
