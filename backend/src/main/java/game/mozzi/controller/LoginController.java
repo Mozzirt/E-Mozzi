@@ -4,6 +4,7 @@ package game.mozzi.controller;
 import game.mozzi.config.response.CommonConstants;
 import game.mozzi.config.response.Message;
 import game.mozzi.config.response.StatusEnum;
+import game.mozzi.config.util.RandomUtils;
 import game.mozzi.domain.user.User;
 import game.mozzi.dto.UserDto;
 import game.mozzi.service.UserService;
@@ -52,12 +53,6 @@ public class LoginController {
     private String naver_secret;
     private final UserService userService;
 
-    // 네이버 로그인 state 난수 생성
-    public String generateState()
-    {
-        SecureRandom random = new SecureRandom();
-        return new BigInteger(130, random).toString(32);
-    }
 
     // 로그인 분기
     @ApiOperation(value="로그인 분기 (API_00_0000) " , notes="로그인 분기한다.") // API - 00 00은 로그인 콘트롤러 0000 은 ID임다
@@ -103,7 +98,7 @@ public class LoginController {
                 rv.setUrl("https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="+ kakao_rest +"&redirect_uri="+SERVER_URL+"/auth/kakao/callback");
                 break;
             case "naver":
-                String state = generateState();
+                String state = RandomUtils.generateState();
                 rv.setUrl("https://nid.naver.com/oauth2.0/authorize?client_id="+ naver_client +"&response_type=code&redirect_uri="+SERVER_URL+"/auth/naver/callback&state="+ state);
                 break;
             default:
