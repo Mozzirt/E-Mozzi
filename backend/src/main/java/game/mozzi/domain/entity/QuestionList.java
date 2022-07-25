@@ -26,8 +26,8 @@ public class QuestionList extends BaseTimeEntity {
     @Column
     private String time;
 
-    @Column
-    private String score;
+    @Column(name = "question_size")
+    private String questionSize;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "socialId")
