@@ -1,4 +1,4 @@
-package game.mozzi.domain.user;
+package game.mozzi.domain.entity;
 
 import game.mozzi.domain.BaseTimeEntity;
 import lombok.AllArgsConstructor;
@@ -13,15 +13,16 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Data
 @Entity
-public class Follow extends BaseTimeEntity {
+public class Mileage extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long followNum;
+    private Long mileageNum;
 
-    @Column(name = "follower")
-    private String follower;
+    @Column
+    private String mileage;
 
-    @Column(name = "following")
-    private String following;
-
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "socialId")
+    private Member member;
 }

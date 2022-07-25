@@ -1,7 +1,7 @@
 package game.mozzi.service;
 
-import game.mozzi.domain.user.User;
-import game.mozzi.domain.repository.UserInfoRepository;
+import game.mozzi.domain.entity.Member;
+import game.mozzi.domain.repository.MemberInfoRepository;
 import game.mozzi.handler.ex.CustomValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,20 +11,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService {
 
-    private final UserInfoRepository userInfoRepository;
+    private final MemberInfoRepository memberInfoRepository;
 
     /**
      * 회원가입
-     * @param user
+     * @param Member
      * @return
      */
     @Transactional
-    public User join(User user){
+    public Member join(Member member){
 
-        if (userInfoRepository.existsBySocialId(user.getSocialId())){
+        if (memberInfoRepository.existsBySocialId(member.getSocialId())){
             throw new CustomValidationException("이미 존재하는 소셜아이디 입니다");
         }
-        User userEntity = userInfoRepository.save(user);
+        Member userEntity = memberInfoRepository.save(member);
         return userEntity;
     }
 
@@ -34,7 +34,7 @@ public class UserService {
      * @return
      */
     public boolean findUser(String socialId){
-        return userInfoRepository.existsBySocialId(socialId);
+        return memberInfoRepository.existsBySocialId(socialId);
     }
 
     /**
@@ -42,8 +42,8 @@ public class UserService {
      * @param socialId
      * @return
      */
-    public User findUserBySocialId(String socialId){
-        return userInfoRepository.findBySocialId(socialId);
+    public Member findUserBySocialId(String socialId){
+        return memberInfoRepository.findBySocialId(socialId);
     }
 
 }

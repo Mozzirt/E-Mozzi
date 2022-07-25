@@ -5,33 +5,13 @@ import game.mozzi.config.SessionListener;
 import game.mozzi.config.response.CommonConstants;
 import game.mozzi.config.response.Message;
 import game.mozzi.config.response.StatusEnum;
-import game.mozzi.domain.user.User;
-import game.mozzi.dto.UserDto;
 import game.mozzi.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
-import org.springframework.ui.Model;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.view.RedirectView;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
-import java.math.BigInteger;
-import java.security.SecureRandom;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
-
-import static game.mozzi.config.Constants.SERVER_URL;
 import static game.mozzi.config.Constants.SESSION_NAME;
 
 @RestController
