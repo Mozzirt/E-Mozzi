@@ -5,8 +5,8 @@ import game.mozzi.config.response.CommonConstants;
 import game.mozzi.config.response.Message;
 import game.mozzi.config.response.StatusEnum;
 import game.mozzi.config.util.RandomUtils;
-import game.mozzi.domain.user.User;
-import game.mozzi.dto.UserDto;
+import game.mozzi.domain.entity.Member;
+import game.mozzi.dto.MemberDto;
 import game.mozzi.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -29,8 +29,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -135,9 +133,9 @@ public class LoginController {
     public ResponseEntity<Message> guestLogin(HttpServletRequest request){
         Message msg = new Message();
         String guestUUID = UUID.randomUUID().toString();
-        UserDto userDto = new UserDto();
-        userDto.setSocialId(guestUUID);
-        this.signUp(userDto);
+        MemberDto memberDto = new MemberDto();
+        memberDto.setSocialId(guestUUID);
+        this.signUp(memberDto);
 
         // GUEST 로그인의 경우 UUID 를 사용하여 socialId에 - 가 들어있음 이걸로 Guest여부 판단가능
         HttpSession session = request.getSession(true);
@@ -207,10 +205,10 @@ public class LoginController {
             msg.setMessage(StatusEnum.OK, CommonConstants.MZ_00_0001, String.valueOf(jo2.get("id")));
         }else {
             try {
-                UserDto userDto = new UserDto();
-                userDto.setSocialId(String.valueOf(jo2.get("id")));
-                userDto.setUserImage(String.valueOf(jo2.getJSONObject("properties").get("profile_image")));
-                this.signUp(userDto);
+                MemberDto memberDto = new MemberDto();
+                memberDto.setSocialId(String.valueOf(jo2.get("id")));
+                memberDto.setUserImage(String.valueOf(jo2.getJSONObject("properties").get("profile_image")));
+                this.signUp(memberDto);
 
                 HttpSession session = request.getSession(true);
                 session.setAttribute(SESSION_NAME, String.valueOf(jo2.get("id")));
@@ -287,11 +285,11 @@ public class LoginController {
             msg.setMessage(StatusEnum.OK, CommonConstants.MZ_00_0001, String.valueOf(jo2.getJSONObject("response").get("id")));
         }else{
             try{
-                UserDto userDto = new UserDto();
-                userDto.setSocialId(String.valueOf(jo2.getJSONObject("response").get("id")));
-                userDto.setUserImage(String.valueOf(jo2.getJSONObject("response").get("profile_image")));
-                userDto.setEmail(String.valueOf(jo2.getJSONObject("response").get("email")));
-                this.signUp(userDto);
+                MemberDto memberDto = new MemberDto();
+                memberDto.setSocialId(String.valueOf(jo2.getJSONObject("response").get("id")));
+                memberDto.setUserImage(String.valueOf(jo2.getJSONObject("response").get("profile_image")));
+                memberDto.setEmail(String.valueOf(jo2.getJSONObject("response").get("email")));
+                this.signUp(memberDto);
 
                 HttpSession session = request.getSession(true);
                 session.setAttribute(SESSION_NAME, String.valueOf(jo2.getJSONObject("response").get("id")));
@@ -345,9 +343,9 @@ public class LoginController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@Valid UserDto userDto) {
-        User user = userDto.toEntity();
-        User userEntity = userService.join(user);
+    public ResponseEntity<?> signUp(@Valid MemberDto memberDto) {
+        Member member = memberDto.toEntity();
+        Member userEntity = userService.join(member);
         return new ResponseEntity<>(userEntity, HttpStatus.OK); // 회원가입 성공했을 경우 http status code 200 전달
     }
 

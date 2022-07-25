@@ -1,13 +1,13 @@
 package game.mozzi.dto;
 
-import game.mozzi.domain.user.User;
+import game.mozzi.domain.entity.Member;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class UserDto {
+public class MemberDto {
 
     @ApiModelProperty(value = "닉네임" , example = "nickname")
     private String nickname;
@@ -22,8 +22,8 @@ public class UserDto {
     @ApiModelProperty(value = "이메일" , example = "rkdwlss2@gmail.com")
     private String email;
 
-    public User toEntity(){
-        return User.builder()
+    public Member toEntity(){
+        return Member.builder()
                 .nickname(nickname)
                 .email(email)
                 .socialId(socialId)
