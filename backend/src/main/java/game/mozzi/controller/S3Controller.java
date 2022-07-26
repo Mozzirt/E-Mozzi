@@ -25,6 +25,14 @@ import static game.mozzi.config.Constants.FILE_MAX_SIZE;
 public class S3Controller {
     private final S3Uploader s3Uploader;
 
+
+    /**----------------------
+     * default static으로 지정하였지만 추후 파람값으로 받아 분기처리할수도있음 ( Ex: 유저이미지, 질문이미지 등등.. )
+     * ----------------------
+     * @param multipartFile
+     * @return
+     * @throws IOException
+     */
     @PostMapping("/upload")
     @ResponseBody
     public String upload(@RequestParam("data") MultipartFile multipartFile) throws IOException {

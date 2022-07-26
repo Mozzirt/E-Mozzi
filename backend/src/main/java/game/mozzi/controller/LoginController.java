@@ -100,7 +100,7 @@ public class LoginController {
                 rv.setUrl("https://nid.naver.com/oauth2.0/authorize?client_id="+ naver_client +"&response_type=code&redirect_uri="+SERVER_URL+"/auth/naver/callback&state="+ state);
                 break;
             default:
-                log.debug("############## MainLogin.login error");
+                log.info("############## MainLogin.login error : urlPath =>  ", login_with);
         }
         return rv;
     }

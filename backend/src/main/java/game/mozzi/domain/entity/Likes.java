@@ -14,11 +14,11 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Entity
-public class reaction extends BaseTimeEntity {
+public class Likes extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reactionNum;
+    private Long likesNum;
 
     @OneToMany(mappedBy = "socialId")
     private List<Member> members;
