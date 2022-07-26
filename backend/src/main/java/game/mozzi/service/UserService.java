@@ -15,7 +15,7 @@ public class UserService {
 
     /**
      * 회원가입
-     * @param Member
+     * @param member
      * @return
      */
     @Transactional
