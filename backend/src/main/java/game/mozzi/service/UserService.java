@@ -4,6 +4,7 @@ import game.mozzi.domain.entity.Member;
 import game.mozzi.domain.repository.MemberInfoRepository;
 import game.mozzi.handler.ex.CustomValidationException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,10 +41,11 @@ public class UserService {
     /**
      * 회원조회 ( 소셜아이디 )
      * @param socialId
+     * @param pageable
      * @return
      */
-    public Member findUserBySocialId(String socialId){
-        return memberInfoRepository.findBySocialId(socialId);
+    public Member findUserBySocialId(String socialId, Pageable pageable){
+        return memberInfoRepository.findBySocialId(socialId,pageable);
     }
 
 }
