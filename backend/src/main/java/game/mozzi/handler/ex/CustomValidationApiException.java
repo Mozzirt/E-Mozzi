@@ -1,14 +1,14 @@
-package com.cos.photogramstart.handler.ex;
+package game.mozzi.handler.ex;
 
 import java.util.Map;
 
+// api 내에서의 Exception이 발생시 해당 런타임 에러 사용
 public class CustomValidationApiException extends RuntimeException{
 
 
     // 객체를 구분할때
     private static final long serialVersionUID =1L;
 
-//    private String message;
     private Map<String,String> errorMap;
 
     public CustomValidationApiException(String message){
@@ -17,7 +17,6 @@ public class CustomValidationApiException extends RuntimeException{
 
     public CustomValidationApiException(String message, Map<String,String> errorMap){
         super(message); //부모한테 던짐
-//        this.message=message;
         this.errorMap=errorMap;
     }
 
