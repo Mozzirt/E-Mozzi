@@ -2,6 +2,10 @@ package game.mozzi.config.response;
 
 import lombok.Data;
 
+/**
+ *  작성자 : beomchul.kim@lotte.com
+ *  Message
+ */
 @Data
 public class Message {
     private StatusEnum status;

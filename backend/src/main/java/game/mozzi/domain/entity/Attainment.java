@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Builder
 @NoArgsConstructor
@@ -28,6 +27,6 @@ public class Attainment extends BaseTimeEntity {
     private Member socialId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hiddenId")
-    private Hidden hiddenId;
+    @JoinColumn(name = "missionId")
+    private Mission missionId;
 }

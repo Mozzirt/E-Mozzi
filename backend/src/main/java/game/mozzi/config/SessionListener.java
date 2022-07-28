@@ -15,7 +15,7 @@ import static game.mozzi.config.Constants.SESSION_NAME;
 
 
 /**
- *  작성자 : beomchul.kim@lotte.net
+ *  작성자 : beomchul.kim@lotte.com
  *  SessionListener
  */
 

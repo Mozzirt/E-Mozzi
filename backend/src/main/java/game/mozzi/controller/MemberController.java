@@ -5,7 +5,7 @@ import game.mozzi.config.SessionListener;
 import game.mozzi.config.response.CommonConstants;
 import game.mozzi.config.response.Message;
 import game.mozzi.config.response.StatusEnum;
-import game.mozzi.service.UserService;
+import game.mozzi.service.MemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +21,10 @@ import static game.mozzi.config.Constants.SESSION_NAME;
 @RequestMapping("/api/v1/user")
 @Api(tags = {"USER API"})
 @RequiredArgsConstructor
-public class UserController {
+public class MemberController {
 
     private final SessionListener sessionListener;
-    private final UserService userService;
+    private final MemberService memberService;
 
     @GetMapping("/session/count")
     @ApiOperation(value = "로그인유저 수 조회",notes = "로그인유저 수 조회")
@@ -40,21 +40,51 @@ public class UserController {
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
-    @GetMapping("/find/login")
+    @GetMapping("/me")
     @ApiOperation(value = "접속중인유저 조회",notes = "접속중인유저 조회")
     public ResponseEntity<Message> currentUserId(@SessionAttribute(name= SESSION_NAME, required = false) String socialId, Message msg){
         msg.setMessage(StatusEnum.OK, CommonConstants.MZ_99_0001, socialId);
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
-    @GetMapping("/find")
+    @GetMapping("/member")
     @ApiOperation(value = "유저정보조회",notes = "유저정보조회")
-    public ResponseEntity<Message> findUserBySocialId(@SessionAttribute(name= SESSION_NAME, required = false) String socialId, @PageableDefault() Pageable pageable, Message msg){
+    public ResponseEntity<Message> findUserBySocialId(@SessionAttribute(name= SESSION_NAME, required = false) String socialId, Message msg){
+        return getMemberResponseEntity(socialId, msg);
+    }
+
+    @GetMapping("/member/{socialId}")
+    @ApiOperation(value = "유저정보조회 (특정유저)",notes = "유저정보조회 (특정유저)")
+    public ResponseEntity<Message> findUserByOtherSocialId(@PathVariable String socialId, Message msg){
+        // todo : 권한설정
+        return getMemberResponseEntity(socialId, msg);
+    }
+
+    /**
+     * /member/{socialId}
+     * /member
+     * @param socialId
+     * @param msg
+     * @return
+     */
+    private ResponseEntity<Message> getMemberResponseEntity(@PathVariable String socialId, Message msg) {
         if(socialId == null){
             msg.setMessage(StatusEnum.UNAUTHORIZED, CommonConstants.MZ_00_0005, "");
             return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
-        msg.setMessage(StatusEnum.OK, CommonConstants.MZ_99_0001, userService.findUserBySocialId(socialId,pageable));
+        msg.setMessage(StatusEnum.OK, CommonConstants.MZ_99_0001, memberService.findUserBySocialId(socialId));
+        return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
+
+    @GetMapping("/dup-nickname")
+    @ApiOperation(value = "닉네임 중복조회",notes = "닉네임 중복조회")
+    public ResponseEntity<Message> duplicateNickname(@RequestParam String nickname, Message msg){
+        boolean resNickname = memberService.findUserNickname(nickname);
+        if(resNickname){
+            msg.setMessage(StatusEnum.FOUND, CommonConstants.MZ_00_0007, nickname);
+        }else{
+            msg.setMessage(StatusEnum.OK, CommonConstants.MZ_00_0006, nickname);
+        }
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 

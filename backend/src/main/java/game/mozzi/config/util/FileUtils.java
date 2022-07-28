@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- *  작성자 : beomchul.kim@lotte.net
+ *  작성자 : beomchul.kim@lotte.com
  *  FileUtil - 확장자검증
  */
 

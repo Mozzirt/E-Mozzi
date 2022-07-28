@@ -1,7 +1,8 @@
 package game.mozzi.config;
 
 /**
- *  Constants
+ * 작성자 : beomchul.kim@lotte.com
+ * Constants
  */
 
 public final class Constants {

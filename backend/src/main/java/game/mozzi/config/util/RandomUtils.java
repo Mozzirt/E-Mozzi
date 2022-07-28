@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- *  작성자 : beomchul.kim@lotte.net
+ *  작성자 : beomchul.kim@lotte.com
  *  FileUtil - 랜덤유틸
  */
 @Slf4j
