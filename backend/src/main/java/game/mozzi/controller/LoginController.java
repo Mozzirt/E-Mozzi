@@ -6,7 +6,7 @@ import game.mozzi.config.response.Message;
 import game.mozzi.config.response.StatusEnum;
 import game.mozzi.config.util.RandomUtils;
 import game.mozzi.domain.entity.Member;
-import game.mozzi.dto.MemberDto;
+import game.mozzi.dto.RegisterDto;
 import game.mozzi.service.MemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -40,6 +40,7 @@ import static game.mozzi.config.Constants.SESSION_NAME;
  *  작성자 : beomchul.kim@lotte.com
  *  Social Login
  *  todo : GUEST 로그인시 UUID '-' 값존재 , 카카오 소셜아이디 -> 숫자 , 네이버 소셜아이디 -> '-' 랜덤으로 존재 따라서 정규식처리? replaceAll처리? ..
+ *  todo : RandomNickname 중복검증필요
  */
 
 @RestController
@@ -97,7 +98,7 @@ public class LoginController {
         RedirectView rv = new RedirectView();
         switch (login_with){
             case "guest":
-                rv.setUrl("http://localhost:8080/auth/test/callback");
+                rv.setUrl("http://localhost:8080/auth/guest/callback");
                 break;
             case "kakao":
                 rv.setUrl("https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="+ kakao_rest +"&redirect_uri="+SERVER_URL+"/auth/kakao/callback");
@@ -136,13 +137,14 @@ public class LoginController {
             @ApiResponse(code = 400, message = "Bad Request"),
             @ApiResponse(code = 500, message = "An error occurred")
     })
-    @RequestMapping(value = "auth/test/callback")
+    @RequestMapping(value = "auth/guest/callback")
     public ResponseEntity<Message> guestLogin(HttpServletRequest request){
         Message msg = new Message();
         String guestUUID = UUID.randomUUID().toString();
-        MemberDto memberDto = new MemberDto();
-        memberDto.setSocialId(guestUUID);
-        this.signUp(memberDto);
+        RegisterDto registerDto = new RegisterDto();
+        registerDto.setSocialId(guestUUID);
+        registerDto.setNickname(RandomUtils.randomNickname());
+        this.signUp(registerDto);
 
         // GUEST 로그인의 경우 UUID 를 사용하여 socialId에 - 가 들어있음 이걸로 Guest여부 판단가능
         HttpSession session = request.getSession(true);
@@ -212,10 +214,11 @@ public class LoginController {
             msg.setMessage(StatusEnum.OK, CommonConstants.MZ_00_0001, String.valueOf(jo2.get("id")));
         }else {
             try {
-                MemberDto memberDto = new MemberDto();
-                memberDto.setSocialId(String.valueOf(jo2.get("id")));
-                memberDto.setUserImage(String.valueOf(jo2.getJSONObject("properties").get("profile_image")));
-                this.signUp(memberDto);
+                RegisterDto registerDto = new RegisterDto();
+                registerDto.setSocialId(String.valueOf(jo2.get("id")));
+                registerDto.setUserImage(String.valueOf(jo2.getJSONObject("properties").get("profile_image")));
+                registerDto.setNickname(RandomUtils.randomNickname());
+                this.signUp(registerDto);
 
                 HttpSession session = request.getSession(true);
                 session.setAttribute(SESSION_NAME, String.valueOf(jo2.get("id")));
@@ -292,11 +295,12 @@ public class LoginController {
             msg.setMessage(StatusEnum.OK, CommonConstants.MZ_00_0001, String.valueOf(jo2.getJSONObject("response").get("id")));
         }else{
             try{
-                MemberDto memberDto = new MemberDto();
-                memberDto.setSocialId(String.valueOf(jo2.getJSONObject("response").get("id")));
-                memberDto.setUserImage(String.valueOf(jo2.getJSONObject("response").get("profile_image")));
-                memberDto.setEmail(String.valueOf(jo2.getJSONObject("response").get("email")));
-                this.signUp(memberDto);
+                RegisterDto registerDto = new RegisterDto();
+                registerDto.setSocialId(String.valueOf(jo2.getJSONObject("response").get("id")));
+                registerDto.setUserImage(String.valueOf(jo2.getJSONObject("response").get("profile_image")));
+                registerDto.setEmail(String.valueOf(jo2.getJSONObject("response").get("email")));
+                registerDto.setNickname(RandomUtils.randomNickname());
+                this.signUp(registerDto);
 
                 HttpSession session = request.getSession(true);
                 session.setAttribute(SESSION_NAME, String.valueOf(jo2.getJSONObject("response").get("id")));
@@ -350,8 +354,8 @@ public class LoginController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@Valid MemberDto memberDto) {
-        Member member = memberDto.toEntity();
+    public ResponseEntity<?> signUp(@Valid RegisterDto registerDto) {
+        Member member = registerDto.toEntity();
         Member userEntity = userService.join(member);
         return new ResponseEntity<>(userEntity, HttpStatus.OK); // 회원가입 성공했을 경우 http status code 200 전달
     }
