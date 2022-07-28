@@ -14,11 +14,11 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Entity
-public class Hidden extends BaseTimeEntity {
+public class Mission extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long hiddenNum;
+    private Long missionNum;
 
     @Column
     private String title;

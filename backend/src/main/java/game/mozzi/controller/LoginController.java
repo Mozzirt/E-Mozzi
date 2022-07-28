@@ -7,7 +7,7 @@ import game.mozzi.config.response.StatusEnum;
 import game.mozzi.config.util.RandomUtils;
 import game.mozzi.domain.entity.Member;
 import game.mozzi.dto.MemberDto;
-import game.mozzi.service.UserService;
+import game.mozzi.service.MemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -56,7 +56,7 @@ public class LoginController {
     private String naver_client;
     @Value("${naver.secret}")
     private String naver_secret;
-    private final UserService userService;
+    private final MemberService userService;
 
 
     // 로그인 분기

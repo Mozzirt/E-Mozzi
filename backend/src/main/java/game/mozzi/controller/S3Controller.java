@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.ws.rs.Path;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -26,16 +27,21 @@ public class S3Controller {
     private final S3Uploader s3Uploader;
 
 
-    /**----------------------
-     * default static으로 지정하였지만 추후 파람값으로 받아 분기처리할수도있음 ( Ex: 유저이미지, 질문이미지 등등.. )
-     * ----------------------
+    /**
+     * 질문용 파일업로드
+     *
+     * StaticPath => 질문의 경우 static , 유저이미지일 경우 user
      * @param multipartFile
      * @return
      * @throws IOException
      */
-    @PostMapping("/upload")
+    @PostMapping("/upload/{staticPath}")
     @ResponseBody
-    public String upload(@RequestParam("data") MultipartFile multipartFile) throws IOException {
+    public String uploadQuestionImage(@RequestParam("data") MultipartFile multipartFile, @PathVariable String staticPath) throws IOException {
+        return uploadImage(multipartFile, staticPath);
+    }
+
+    public String uploadImage(MultipartFile multipartFile, String staticPath) throws IOException {
         // 파일크기 9M 이상일경우
         if(multipartFile.getSize() > FILE_MAX_SIZE) {
             return CommonConstants.MZ_99_0003;

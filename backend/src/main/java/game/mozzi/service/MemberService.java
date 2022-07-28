@@ -8,9 +8,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.PrePersist;
+
 @RequiredArgsConstructor
 @Service
-public class UserService {
+public class MemberService {
 
     private final MemberInfoRepository memberInfoRepository;
 
@@ -41,11 +43,18 @@ public class UserService {
     /**
      * 회원조회 ( 소셜아이디 )
      * @param socialId
-     * @param pageable
      * @return
      */
-    public Member findUserBySocialId(String socialId, Pageable pageable){
-        return memberInfoRepository.findBySocialId(socialId,pageable);
+    public Member findUserBySocialId(String socialId){
+        return memberInfoRepository.findBySocialId(socialId);
     }
 
+    /**
+     * 닉네임 중복조회 ( 닉네임 )
+     * @param nickname
+     * @return
+     */
+    public boolean findUserNickname(String nickname) {
+        return memberInfoRepository.existsByNickname(nickname);
+    }
 }

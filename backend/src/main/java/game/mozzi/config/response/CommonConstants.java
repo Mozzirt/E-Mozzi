@@ -29,6 +29,9 @@ public final class CommonConstants {
     public static final String MZ_00_0003 = "회원가입 실패";
     public static final String MZ_00_0004 = "게스트 로그인";
     public static final String MZ_00_0005 = "권한이 없습니다";
+    public static final String MZ_00_0006 = "사용가능한 닉네임입니다";
+    public static final String MZ_00_0007 = "이미 사용중인 닉네임입니다";
+
 
 
 }
