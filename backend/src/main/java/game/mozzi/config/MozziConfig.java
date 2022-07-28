@@ -11,7 +11,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import javax.servlet.Filter;
 
 /**
- *  설정파일
+ * 작성자 : beomchul.kim@lotte.com
+ * 설정파일
  */
 
 @Configuration

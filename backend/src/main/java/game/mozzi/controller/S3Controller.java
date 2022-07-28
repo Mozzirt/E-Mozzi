@@ -14,7 +14,7 @@ import static game.mozzi.config.Constants.FILE_MAX_SIZE;
 
 
 /**
- *  작성자 : beomchul.kim@lotte.net
+ *  작성자 : beomchul.kim@lotte.com
  *  S3Controller - 버킷
  */
 

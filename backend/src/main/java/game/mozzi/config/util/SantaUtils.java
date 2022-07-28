@@ -3,6 +3,7 @@ package game.mozzi.config.util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -11,8 +12,9 @@ import java.util.Base64;
 
 
 /**
- * 작성자 : beomchul.kim@lotte.net
+ * 작성자 : beomchul.kim@lotte.com
  * ETC Utils
+ * 이해안가면 웹엑스주세염
  */
 
 @Slf4j
@@ -60,4 +62,18 @@ public class SantaUtils {
     }
 
 
+    /**
+     * JPA Util
+     * JPA ID 널체크 후 존재시 Update 없을시 Insert 처리 (분기최적화용)
+     * 사용 ) Member member = memberRepository.findById(member.getSocialId).orElseGet(Member::new);
+     * 사용 ) SantaUtils.jpaSaveUpdate(member.getSocialId, memberRepository, member);
+     * @param id
+     * @param repo
+     * @param entity
+     */
+    public static void jpaSaveUpdate(Long id, JpaRepository repo, Object entity) {
+        if (id == null || id.equals("")) {
+            repo.save(entity);
+        }
+    }
 }

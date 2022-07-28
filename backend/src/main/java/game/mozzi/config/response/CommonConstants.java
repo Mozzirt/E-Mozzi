@@ -2,7 +2,7 @@ package game.mozzi.config.response;
 
 
 /**
- * 작성자 : beomchul.kim@lotte.net
+ * 작성자 : beomchul.kim@lotte.com
  * - CommonConstants
  * 규칙 MZ_xx_yyyy
  * xx : 모듈

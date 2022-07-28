@@ -35,6 +35,13 @@ import java.util.UUID;
 import static game.mozzi.config.Constants.SERVER_URL;
 import static game.mozzi.config.Constants.SESSION_NAME;
 
+
+/**
+ *  작성자 : beomchul.kim@lotte.com
+ *  Social Login
+ *  todo : GUEST 로그인시 UUID '-' 값존재 , 카카오 소셜아이디 -> 숫자 , 네이버 소셜아이디 -> '-' 랜덤으로 존재 따라서 정규식처리? replaceAll처리? ..
+ */
+
 @RestController
 @Slf4j
 @RequestMapping()
@@ -146,7 +153,7 @@ public class LoginController {
 
 
     /**
-     * 작성자 : beomchul.kim@lotte.net
+     * 작성자 : beomchul.kim@lotte.com
      * 카카오 로그인
      */
     @RequestMapping(value = "auth/kakao/callback")
@@ -223,7 +230,7 @@ public class LoginController {
 
 
     /**
-     * 작성자 : beomchul.kim@lotte.net
+     * 작성자 : beomchul.kim@lotte.com
      * 네이버 로그인
      */
     @RequestMapping(value = "auth/naver/callback")

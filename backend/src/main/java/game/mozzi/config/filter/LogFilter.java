@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 /**
- *  작성자 : beomchul.kim@lotte.net
+ *  작성자 : beomchul.kim@lotte.com
  *  LOG FILTER
  */
 
