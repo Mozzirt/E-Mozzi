@@ -1,7 +1,12 @@
 package game.mozzi.config.util;
 
+import game.mozzi.domain.entity.Member;
+import game.mozzi.domain.repository.MemberInfoRepository;
+import game.mozzi.service.MemberService;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -9,6 +14,11 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 /**
@@ -17,11 +27,13 @@ import java.util.Base64;
  * 이해안가면 웹엑스주세염
  */
 
+@RequiredArgsConstructor
+@Controller
 @Slf4j
 @PropertySource("classpath:application.properties")
 public class SantaUtils {
 
-
+    private final MemberService memberService;
     public static String aesAlgorithm = "AES/CBC/PKCS5Padding";
     private final String secretKey = "imsiimsiimsiimsi";
     private final String iv = secretKey.substring(0, 16); // 16byte
@@ -75,5 +87,20 @@ public class SantaUtils {
         if (id == null || id.equals("")) {
             repo.save(entity);
         }
+    }
+
+    /**
+     * Admin CHECK Util
+     * ID 체크 후 존재시 ROLE이 사용자 권한인지 관리자 권한인지 Boolean형식으로 반환 관리자 계정이면 TRUE, 계정이 없거나, USER권한이면 false반환
+     * @param socialId
+     */
+    public boolean idAdminCheck(@RequestParam String socialId) {
+        if (socialId != null && !socialId.equals("")) {
+            Member member = memberService.findUserBySocialId(socialId);
+            if (member.getRole()=="ADMIN"){
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -352,6 +352,7 @@ public class LoginController {
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@Valid MemberDto memberDto) {
         Member member = memberDto.toEntity();
+        member.setRole("USER"); // 유저 권한으로 강제 입력
         Member userEntity = userService.join(member);
         return new ResponseEntity<>(userEntity, HttpStatus.OK); // 회원가입 성공했을 경우 http status code 200 전달
     }

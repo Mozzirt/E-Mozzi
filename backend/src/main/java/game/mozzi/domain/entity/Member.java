@@ -35,7 +35,11 @@ public class Member extends BaseTimeEntity {
     @Column
     private String nickname;
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+    @Column
+    private String role;
+
+    //@OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "member")
     private Mileage mileage;
 
     @OneToMany(mappedBy = "socialId")
