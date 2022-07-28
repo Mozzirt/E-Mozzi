@@ -94,7 +94,7 @@ public class SantaUtils {
      * ID 체크 후 존재시 ROLE이 사용자 권한인지 관리자 권한인지 Boolean형식으로 반환 관리자 계정이면 TRUE, 계정이 없거나, USER권한이면 false반환
      * @param socialId
      */
-    public boolean idAdminCheck(@RequestParam String socialId) {
+    public boolean idAdminCheck(String socialId) {
         if (socialId != null && !socialId.equals("")) {
             Member member = memberService.findUserBySocialId(socialId);
             if (member.getRole()=="ADMIN"){
