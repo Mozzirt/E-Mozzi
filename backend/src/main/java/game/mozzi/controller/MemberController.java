@@ -5,15 +5,19 @@ import game.mozzi.config.SessionListener;
 import game.mozzi.config.response.CommonConstants;
 import game.mozzi.config.response.Message;
 import game.mozzi.config.response.StatusEnum;
+import game.mozzi.domain.entity.Member;
+import game.mozzi.dto.MemberDto;
+import game.mozzi.dto.RegisterDto;
 import game.mozzi.service.MemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+
 import static game.mozzi.config.Constants.SESSION_NAME;
 
 @RestController
@@ -40,20 +44,20 @@ public class MemberController {
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
-    @GetMapping("/me")
+    @GetMapping("/current-id")
     @ApiOperation(value = "접속중인유저 조회",notes = "접속중인유저 조회")
     public ResponseEntity<Message> currentUserId(@SessionAttribute(name= SESSION_NAME, required = false) String socialId, Message msg){
         msg.setMessage(StatusEnum.OK, CommonConstants.MZ_99_0001, socialId);
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
-    @GetMapping("/member")
+    @GetMapping("/current-info")
     @ApiOperation(value = "유저정보조회",notes = "유저정보조회")
     public ResponseEntity<Message> findUserBySocialId(@SessionAttribute(name= SESSION_NAME, required = false) String socialId, Message msg){
         return getMemberResponseEntity(socialId, msg);
     }
 
-    @GetMapping("/member/{socialId}")
+    @GetMapping("/info/{socialId}")
     @ApiOperation(value = "유저정보조회 (특정유저)",notes = "유저정보조회 (특정유저)")
     public ResponseEntity<Message> findUserByOtherSocialId(@PathVariable String socialId, Message msg){
         // todo : 권한설정
@@ -88,5 +92,13 @@ public class MemberController {
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
+    // 회원수정
+    @PutMapping("/info")
+    public ResponseEntity<?> modifyUserInfo(@SessionAttribute(name= SESSION_NAME, required = false) String socialId, @Valid MemberDto memberDto, Message msg) {
+        Member member = memberDto.toEntity();
+        Member userEntity = memberService.modifyInfo(socialId, member);
+        msg.setMessage(StatusEnum.OK, CommonConstants.MZ_99_0001, userEntity);
+        return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
 }
 

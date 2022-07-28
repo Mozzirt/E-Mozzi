@@ -57,4 +57,18 @@ public class MemberService {
     public boolean findUserNickname(String nickname) {
         return memberInfoRepository.existsByNickname(nickname);
     }
+
+    /**
+     * 회원수정
+     * @param member
+     * @return
+     */
+    @Transactional
+    public Member modifyInfo(String socialId, Member member){
+        Member findMember = memberInfoRepository.findBySocialId(socialId);
+        // todo : 데이터저장작업 임시 이메일만 test@test.com으로 함
+        findMember.setEmail("test@test.com");
+        return findMember;
+    }
+
 }
