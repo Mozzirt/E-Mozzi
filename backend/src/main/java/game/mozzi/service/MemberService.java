@@ -2,6 +2,7 @@ package game.mozzi.service;
 
 import game.mozzi.domain.entity.Member;
 import game.mozzi.domain.repository.MemberInfoRepository;
+import game.mozzi.dto.MemberDto;
 import game.mozzi.handler.ex.CustomValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -60,14 +61,13 @@ public class MemberService {
 
     /**
      * 회원수정
-     * @param member
+     * @param memberDto
      * @return
      */
     @Transactional
-    public Member modifyInfo(String socialId, Member member){
+    public Member modifyInfo(String socialId, MemberDto memberDto){
         Member findMember = memberInfoRepository.findBySocialId(socialId);
-        // todo : 데이터저장작업 임시 이메일만 test@test.com으로 함
-        findMember.setEmail("test@test.com");
+        findMember.updateMember(memberDto);
         return findMember;
     }
 

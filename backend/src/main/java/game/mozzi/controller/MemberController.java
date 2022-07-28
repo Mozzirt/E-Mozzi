@@ -95,8 +95,7 @@ public class MemberController {
     // 회원수정
     @PutMapping("/info")
     public ResponseEntity<?> modifyUserInfo(@SessionAttribute(name= SESSION_NAME, required = false) String socialId, @Valid MemberDto memberDto, Message msg) {
-        Member member = memberDto.toEntity();
-        Member userEntity = memberService.modifyInfo(socialId, member);
+        Member userEntity = memberService.modifyInfo(socialId, memberDto);
         msg.setMessage(StatusEnum.OK, CommonConstants.MZ_99_0001, userEntity);
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
