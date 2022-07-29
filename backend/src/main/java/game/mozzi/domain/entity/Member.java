@@ -1,6 +1,8 @@
 package game.mozzi.domain.entity;
 
 import game.mozzi.domain.BaseTimeEntity;
+import game.mozzi.domain.entity.embedded.Role;
+import game.mozzi.domain.entity.embedded.SocialType;
 import game.mozzi.dto.MemberDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +29,10 @@ public class Member extends BaseTimeEntity {
     @Column(name="user_image")
     private String userImage;
 
+    @Column(name="social_type")
+    @Enumerated(EnumType.STRING)
+    private SocialType socialType;
+
     @Column
     private String email;
 
@@ -35,6 +41,9 @@ public class Member extends BaseTimeEntity {
 
     @Column
     private String nickname;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
     private Mileage mileage;

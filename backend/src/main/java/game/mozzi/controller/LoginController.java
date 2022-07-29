@@ -6,6 +6,9 @@ import game.mozzi.config.response.Message;
 import game.mozzi.config.response.StatusEnum;
 import game.mozzi.config.util.RandomUtils;
 import game.mozzi.domain.entity.Member;
+import game.mozzi.domain.entity.embedded.Role;
+import game.mozzi.domain.entity.embedded.SocialType;
+import game.mozzi.dto.MemberDto;
 import game.mozzi.dto.RegisterDto;
 import game.mozzi.service.MemberService;
 import io.swagger.annotations.Api;
@@ -61,38 +64,6 @@ public class LoginController {
 
 
     // 로그인 분기
-    @ApiOperation(value="로그인 분기 (API_00_0000) " , notes="로그인 분기한다.") // API - 00 00은 로그인 콘트롤러 0000 은 ID임다
-    @ApiResponses({
-            @ApiResponse(code = 200
-                    /*
-                     * response class가 "List", "Set" , "Map" 일때만, default 빈값 or 삭제
-                     *
-                     * */
-                    , responseContainer = ""
-                    , response = RedirectView.class
-                    , message = "<pre>"
-                    + "Request han been successfully<br/>"
-                    + "{<br/>"
-                    + "  \"data\": {}, <font color=\"red\">data 항목은 Example Value/Model 참고</font><br/>"
-                    + "  \"detailMessage\": \"처리중 오류 발생시 상세 메세지 노출.\",<br/>"
-                    + "  \"resultMessage\": \"정상처리 되었습니다.\",<br/>"
-                    + "  \"statusCode\": 200<br/>"
-                    + "}"
-                    + "</pre>"),
-            @ApiResponse(code = 400, message = "Bad Request"),
-            @ApiResponse(code = 500, message = "An error occurred")
-    })
-    @ApiImplicitParams({
-            @ApiImplicitParam(
-                    name = "with"
-                    , value = "guest,kakao,naver"
-                    , required = true
-                    , dataType = "string"
-                    , paramType = "path"
-                    , defaultValue = "guest"
-                    , example = "guest"
-            )
-    })
     @GetMapping("/login/{with}")
     public RedirectView MainLogin(@PathVariable("with") String login_with){
         RedirectView rv = new RedirectView();
@@ -116,37 +87,16 @@ public class LoginController {
     /**
      * GUEST 로그인
      */
-    @ApiOperation(value="GUEST 로그인 (API_00_0001) " , notes="GUEST 로그인한다.") // API - 00 00은 로그인 콘트롤러 0000 은 ID임다
-    @ApiResponses({
-            @ApiResponse(code = 200
-                    /*
-                     * response class가 "List", "Set" , "Map" 일때만, default 빈값 or 삭제
-                     *
-                     * */
-                    , responseContainer = ""
-                    , response = ResponseEntity.class
-                    , message = "<pre>"
-                    + "Request han been successfully<br/>"
-                    + "{<br/>"
-                    + "  \"data\": {}, <font color=\"red\">data 항목은 Example Value/Model 참고</font><br/>"
-                    + "  \"detailMessage\": \"처리중 오류 발생시 상세 메세지 노출.\",<br/>"
-                    + "  \"resultMessage\": \"정상처리 되었습니다.\",<br/>"
-                    + "  \"statusCode\": 200<br/>"
-                    + "}"
-                    + "</pre>"),
-            @ApiResponse(code = 400, message = "Bad Request"),
-            @ApiResponse(code = 500, message = "An error occurred")
-    })
-    @RequestMapping(value = "auth/guest/callback")
+    @RequestMapping(value = "auth/test/callback")
     public ResponseEntity<Message> guestLogin(HttpServletRequest request){
         Message msg = new Message();
         String guestUUID = UUID.randomUUID().toString();
         RegisterDto registerDto = new RegisterDto();
         registerDto.setSocialId(guestUUID);
-        registerDto.setNickname(RandomUtils.randomNickname());
+        registerDto.setRole(Role.GUEST);
+        registerDto.setSocialType(SocialType.GUEST);
         this.signUp(registerDto);
 
-        // GUEST 로그인의 경우 UUID 를 사용하여 socialId에 - 가 들어있음 이걸로 Guest여부 판단가능
         HttpSession session = request.getSession(true);
         session.setAttribute(SESSION_NAME, guestUUID);
         msg.setMessage(StatusEnum.OK, CommonConstants.MZ_00_0004, guestUUID);
@@ -217,7 +167,8 @@ public class LoginController {
                 RegisterDto registerDto = new RegisterDto();
                 registerDto.setSocialId(String.valueOf(jo2.get("id")));
                 registerDto.setUserImage(String.valueOf(jo2.getJSONObject("properties").get("profile_image")));
-                registerDto.setNickname(RandomUtils.randomNickname());
+                registerDto.setRole(Role.NORMAL);
+                registerDto.setSocialType(SocialType.KAKAO);
                 this.signUp(registerDto);
 
                 HttpSession session = request.getSession(true);
@@ -299,7 +250,8 @@ public class LoginController {
                 registerDto.setSocialId(String.valueOf(jo2.getJSONObject("response").get("id")));
                 registerDto.setUserImage(String.valueOf(jo2.getJSONObject("response").get("profile_image")));
                 registerDto.setEmail(String.valueOf(jo2.getJSONObject("response").get("email")));
-                registerDto.setNickname(RandomUtils.randomNickname());
+                registerDto.setRole(Role.NORMAL);
+                registerDto.setSocialType(SocialType.NAVER);
                 this.signUp(registerDto);
 
                 HttpSession session = request.getSession(true);
