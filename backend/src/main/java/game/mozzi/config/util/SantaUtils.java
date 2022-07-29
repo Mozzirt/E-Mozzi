@@ -1,6 +1,7 @@
 package game.mozzi.config.util;
 
 import game.mozzi.domain.entity.Member;
+import game.mozzi.domain.entity.embedded.Role;
 import game.mozzi.domain.repository.MemberInfoRepository;
 import game.mozzi.service.MemberService;
 import lombok.NoArgsConstructor;
@@ -90,14 +91,14 @@ public class SantaUtils {
     }
 
     /**
-     * Admin CHECK Util
+     * isAdmin Util
      * ID 체크 후 존재시 ROLE이 사용자 권한인지 관리자 권한인지 Boolean형식으로 반환 관리자 계정이면 TRUE, 계정이 없거나, USER권한이면 false반환
      * @param socialId
      */
-    public boolean idAdminCheck(String socialId) {
+    public boolean isAdmin(String socialId) {
         if (socialId != null && !socialId.equals("")) {
             Member member = memberService.findUserBySocialId(socialId);
-            if (member.getRole()=="ADMIN"){
+            if (member.getRole() == Role.ADMIN){
                 return true;
             }
         }
