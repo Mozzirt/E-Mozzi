@@ -9,6 +9,7 @@ import game.mozzi.domain.entity.Member;
 import game.mozzi.domain.entity.embedded.Role;
 import game.mozzi.domain.entity.embedded.SocialType;
 import game.mozzi.dto.MemberDto;
+import game.mozzi.dto.RegisterDto;
 import game.mozzi.service.MemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -42,6 +43,7 @@ import static game.mozzi.config.Constants.SESSION_NAME;
  *  작성자 : beomchul.kim@lotte.com
  *  Social Login
  *  todo : GUEST 로그인시 UUID '-' 값존재 , 카카오 소셜아이디 -> 숫자 , 네이버 소셜아이디 -> '-' 랜덤으로 존재 따라서 정규식처리? replaceAll처리? ..
+ *  todo : RandomNickname 중복검증필요
  */
 
 @RestController
@@ -67,7 +69,7 @@ public class LoginController {
         RedirectView rv = new RedirectView();
         switch (login_with){
             case "guest":
-                rv.setUrl("http://localhost:8080/auth/test/callback");
+                rv.setUrl("http://localhost:8080/auth/guest/callback");
                 break;
             case "kakao":
                 rv.setUrl("https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="+ kakao_rest +"&redirect_uri="+SERVER_URL+"/auth/kakao/callback");
@@ -89,11 +91,11 @@ public class LoginController {
     public ResponseEntity<Message> guestLogin(HttpServletRequest request){
         Message msg = new Message();
         String guestUUID = UUID.randomUUID().toString();
-        MemberDto memberDto = new MemberDto();
-        memberDto.setSocialId(guestUUID);
-        memberDto.setRole(Role.GUEST);
-        memberDto.setSocialType(SocialType.GUEST);
-        this.signUp(memberDto);
+        RegisterDto registerDto = new RegisterDto();
+        registerDto.setSocialId(guestUUID);
+        registerDto.setRole(Role.GUEST);
+        registerDto.setSocialType(SocialType.GUEST);
+        this.signUp(registerDto);
 
         HttpSession session = request.getSession(true);
         session.setAttribute(SESSION_NAME, guestUUID);
@@ -162,12 +164,12 @@ public class LoginController {
             msg.setMessage(StatusEnum.OK, CommonConstants.MZ_00_0001, String.valueOf(jo2.get("id")));
         }else {
             try {
-                MemberDto memberDto = new MemberDto();
-                memberDto.setSocialId(String.valueOf(jo2.get("id")));
-                memberDto.setUserImage(String.valueOf(jo2.getJSONObject("properties").get("profile_image")));
-                memberDto.setRole(Role.NORMAL);
-                memberDto.setSocialType(SocialType.KAKAO);
-                this.signUp(memberDto);
+                RegisterDto registerDto = new RegisterDto();
+                registerDto.setSocialId(String.valueOf(jo2.get("id")));
+                registerDto.setUserImage(String.valueOf(jo2.getJSONObject("properties").get("profile_image")));
+                registerDto.setRole(Role.NORMAL);
+                registerDto.setSocialType(SocialType.KAKAO);
+                this.signUp(registerDto);
 
                 HttpSession session = request.getSession(true);
                 session.setAttribute(SESSION_NAME, String.valueOf(jo2.get("id")));
@@ -244,13 +246,13 @@ public class LoginController {
             msg.setMessage(StatusEnum.OK, CommonConstants.MZ_00_0001, String.valueOf(jo2.getJSONObject("response").get("id")));
         }else{
             try{
-                MemberDto memberDto = new MemberDto();
-                memberDto.setSocialId(String.valueOf(jo2.getJSONObject("response").get("id")));
-                memberDto.setUserImage(String.valueOf(jo2.getJSONObject("response").get("profile_image")));
-                memberDto.setEmail(String.valueOf(jo2.getJSONObject("response").get("email")));
-                memberDto.setRole(Role.NORMAL);
-                memberDto.setSocialType(SocialType.NAVER);
-                this.signUp(memberDto);
+                RegisterDto registerDto = new RegisterDto();
+                registerDto.setSocialId(String.valueOf(jo2.getJSONObject("response").get("id")));
+                registerDto.setUserImage(String.valueOf(jo2.getJSONObject("response").get("profile_image")));
+                registerDto.setEmail(String.valueOf(jo2.getJSONObject("response").get("email")));
+                registerDto.setRole(Role.NORMAL);
+                registerDto.setSocialType(SocialType.NAVER);
+                this.signUp(registerDto);
 
                 HttpSession session = request.getSession(true);
                 session.setAttribute(SESSION_NAME, String.valueOf(jo2.getJSONObject("response").get("id")));
@@ -304,8 +306,8 @@ public class LoginController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@Valid MemberDto memberDto) {
-        Member member = memberDto.toEntity();
+    public ResponseEntity<?> signUp(@Valid RegisterDto registerDto) {
+        Member member = registerDto.toEntity();
         Member userEntity = userService.join(member);
         return new ResponseEntity<>(userEntity, HttpStatus.OK); // 회원가입 성공했을 경우 http status code 200 전달
     }

@@ -2,6 +2,7 @@ package game.mozzi.service;
 
 import game.mozzi.domain.entity.Member;
 import game.mozzi.domain.repository.MemberInfoRepository;
+import game.mozzi.dto.MemberDto;
 import game.mozzi.handler.ex.CustomValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -57,4 +58,17 @@ public class MemberService {
     public boolean findUserNickname(String nickname) {
         return memberInfoRepository.existsByNickname(nickname);
     }
+
+    /**
+     * 회원수정
+     * @param memberDto
+     * @return
+     */
+    @Transactional
+    public Member modifyInfo(String socialId, MemberDto memberDto){
+        Member findMember = memberInfoRepository.findBySocialId(socialId);
+        findMember.updateMember(memberDto);
+        return findMember;
+    }
+
 }

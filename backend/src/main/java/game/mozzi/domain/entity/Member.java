@@ -3,6 +3,7 @@ package game.mozzi.domain.entity;
 import game.mozzi.domain.BaseTimeEntity;
 import game.mozzi.domain.entity.embedded.Role;
 import game.mozzi.domain.entity.embedded.SocialType;
+import game.mozzi.dto.MemberDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -52,4 +53,11 @@ public class Member extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "questionListNum")
     private List<QuestionList> questionLists;
+
+    public void updateMember(MemberDto memberDto){
+        this.userImage = memberDto.getUserImage();
+        this.email = memberDto.getEmail();
+        this.phone = memberDto.getPhone();
+        this.nickname = memberDto.getNickname();
+    }
 }

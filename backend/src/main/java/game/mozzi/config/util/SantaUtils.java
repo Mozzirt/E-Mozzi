@@ -77,7 +77,7 @@ public class SantaUtils {
 
     /**
      * JPA Util
-     * JPA ID 널체크 후 존재시 Update 없을시 Insert 처리 (분기최적화용)
+     * JPA ID 널체크 후 존재시 Update 없을시 Insert 처리 (분기최적화용) -> pk값으로 찾을경우 가능
      * 사용 ) Member member = memberRepository.findById(member.getSocialId).orElseGet(Member::new);
      * 사용 ) SantaUtils.jpaSaveUpdate(member.getSocialId, memberRepository, member);
      * @param id
