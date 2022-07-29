@@ -31,13 +31,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 @Controller
 @Slf4j
-@PropertySource("classpath:application.properties")
 public class SantaUtils {
 
     private final MemberService memberService;
     public static String aesAlgorithm = "AES/CBC/PKCS5Padding";
-    private final String secretKey = "imsiimsiimsiimsi";
-    private final String iv = secretKey.substring(0, 16); // 16byte
+    private static final String secretKey = "imsiimsiimsiimsi";
+    private static final String iv = secretKey.substring(0, 16); // 16byte
 
 
     /**
@@ -46,7 +45,7 @@ public class SantaUtils {
      * @return
      * @throws Exception
      */
-    public String encrypt(String text) throws Exception {
+    public static String encrypt(String text) throws Exception {
         Cipher cipher = Cipher.getInstance(aesAlgorithm);
         SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
         IvParameterSpec ivParamSpec = new IvParameterSpec(iv.getBytes());
@@ -63,7 +62,7 @@ public class SantaUtils {
      * @return
      * @throws Exception
      */
-    public String decrypt(String cipherText) throws Exception {
+    public static String decrypt(String cipherText) throws Exception {
         Cipher cipher = Cipher.getInstance(aesAlgorithm);
         SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
         IvParameterSpec ivParamSpec = new IvParameterSpec(iv.getBytes());

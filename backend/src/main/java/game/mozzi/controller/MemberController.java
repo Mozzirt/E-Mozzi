@@ -60,7 +60,6 @@ public class MemberController {
     @GetMapping("/info/{socialId}")
     @ApiOperation(value = "유저정보조회 (특정유저)",notes = "유저정보조회 (특정유저)")
     public ResponseEntity<Message> findUserByOtherSocialId(@PathVariable String socialId, Message msg){
-        // todo : 권한설정
         return getMemberResponseEntity(socialId, msg);
     }
 
@@ -80,7 +79,7 @@ public class MemberController {
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
-    @GetMapping("/dup-nickname")
+    @GetMapping("/check-nickname")
     @ApiOperation(value = "닉네임 중복조회",notes = "닉네임 중복조회")
     public ResponseEntity<Message> duplicateNickname(@RequestParam String nickname, Message msg){
         boolean resNickname = memberService.findUserNickname(nickname);

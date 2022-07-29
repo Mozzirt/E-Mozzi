@@ -1,6 +1,8 @@
 package game.mozzi.dto;
 
 import game.mozzi.domain.entity.Member;
+import game.mozzi.domain.entity.embedded.Role;
+import game.mozzi.domain.entity.embedded.SocialType;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -22,11 +24,19 @@ public class RegisterDto {
     @ApiModelProperty(value = "이메일" , example = "rkdwlss2@gmail.com")
     private String email;
 
+    @ApiModelProperty(value = "소셜타입" , example = "kakao")
+    private SocialType socialType;
+
+    @ApiModelProperty(value = "유저권한" , example = "ADMIN")
+    private Role role;
+
     public Member toEntity(){
         return Member.builder()
                 .nickname(nickname)
                 .email(email)
                 .socialId(socialId)
+                .socialType(socialType)
+                .role(role)
                 .userImage(userImage)
                 .build();
     }
