@@ -2,17 +2,12 @@ package game.mozzi.domain.entity;
 
 import game.mozzi.domain.BaseTimeEntity;
 import game.mozzi.domain.entity.embedded.ExampleList;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Entity
 public class Question extends BaseTimeEntity {
 
@@ -29,4 +24,10 @@ public class Question extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "questionListNum")
     private QuestionList questionListNum;
+
+    @Builder
+    public Question(String imageUrl, ExampleList contents){
+        this.imageUrl = imageUrl;
+        this.contents = contents;
+    }
 }

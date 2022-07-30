@@ -3,6 +3,7 @@ package game.mozzi.service;
 import game.mozzi.domain.entity.Member;
 import game.mozzi.domain.repository.MemberInfoRepository;
 import game.mozzi.dto.MemberDto;
+import game.mozzi.dto.RegisterDto;
 import game.mozzi.handler.ex.CustomValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -11,25 +12,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.PrePersist;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MemberService {
 
     private final MemberInfoRepository memberInfoRepository;
 
     /**
      * 회원가입
-     * @param member
+     * @param registerDto
      * @return
      */
     @Transactional
-    public Member join(Member member){
-
-        if (memberInfoRepository.existsBySocialId(member.getSocialId())){
+    public Member join(RegisterDto registerDto){
+        if (memberInfoRepository.existsBySocialId(registerDto.getSocialId())){
             throw new CustomValidationException("이미 존재하는 소셜아이디 입니다");
         }
-        Member userEntity = memberInfoRepository.save(member);
-        return userEntity;
+        return memberInfoRepository.save(registerDto.toEntity());
     }
 
     /**
@@ -65,10 +65,10 @@ public class MemberService {
      * @return
      */
     @Transactional
-    public Member modifyInfo(String socialId, MemberDto memberDto){
+    public String modifyInfo(String socialId, MemberDto memberDto){
         Member findMember = memberInfoRepository.findBySocialId(socialId);
-        findMember.updateMember(memberDto);
-        return findMember;
+        findMember.update(memberDto);
+        return socialId;
     }
 
 }
