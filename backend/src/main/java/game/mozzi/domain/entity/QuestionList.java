@@ -1,18 +1,14 @@
 package game.mozzi.domain.entity;
 
 import game.mozzi.domain.BaseTimeEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import game.mozzi.domain.entity.embedded.ExampleList;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Entity
 public class QuestionList extends BaseTimeEntity {
 
@@ -24,7 +20,7 @@ public class QuestionList extends BaseTimeEntity {
     private String title;
 
     @Column
-    private String time;
+    private String size;
 
     @Column(name = "question_size")
     private String questionSize;
@@ -35,4 +31,10 @@ public class QuestionList extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "questionListNum")
     private List<Question> Question;
+
+    @Builder
+    public QuestionList(String title, String size){
+        this.title = title;
+        this.size = size;
+    }
 }

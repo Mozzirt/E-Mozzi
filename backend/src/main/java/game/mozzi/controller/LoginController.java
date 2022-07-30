@@ -308,7 +308,7 @@ public class LoginController {
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@Valid RegisterDto registerDto) {
         Member member = registerDto.toEntity();
-        Member userEntity = userService.join(member);
+        Member userEntity = userService.join(registerDto);
         return new ResponseEntity<>(userEntity, HttpStatus.OK); // 회원가입 성공했을 경우 http status code 200 전달
     }
 

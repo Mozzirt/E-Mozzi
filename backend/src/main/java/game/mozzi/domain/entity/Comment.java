@@ -1,18 +1,14 @@
 package game.mozzi.domain.entity;
 
 import game.mozzi.domain.BaseTimeEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Entity
 public class Comment extends BaseTimeEntity {
 
@@ -26,10 +22,12 @@ public class Comment extends BaseTimeEntity {
     @Column
     private String content;
 
-    @Column
-    private Long point;
-
     @OneToMany(mappedBy = "reportNum")
     private List<Report> reports;
 
+    @Builder
+    public Comment(String title, String content){
+        this.title = title;
+        this.content = content;
+    }
 }

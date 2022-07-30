@@ -1,17 +1,12 @@
 package game.mozzi.domain.entity;
 
 import game.mozzi.domain.BaseTimeEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Entity
 public class Follow extends BaseTimeEntity {
 
@@ -24,4 +19,10 @@ public class Follow extends BaseTimeEntity {
 
     @Column
     private String following;
+
+    @Builder
+    public Follow(String follower, String following){
+        this.follower = follower;
+        this.following = following;
+    }
 }

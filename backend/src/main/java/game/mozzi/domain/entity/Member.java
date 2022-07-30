@@ -4,18 +4,13 @@ import game.mozzi.domain.BaseTimeEntity;
 import game.mozzi.domain.entity.embedded.Role;
 import game.mozzi.domain.entity.embedded.SocialType;
 import game.mozzi.dto.MemberDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Entity
 public class Member extends BaseTimeEntity {
 
@@ -45,7 +40,7 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true )
     private Mileage mileage;
 
     @OneToMany(mappedBy = "socialId")
@@ -54,10 +49,21 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "questionListNum")
     private List<QuestionList> questionLists;
 
-    public void updateMember(MemberDto memberDto){
+    public void update(MemberDto memberDto){
         this.userImage = memberDto.getUserImage();
         this.email = memberDto.getEmail();
         this.phone = memberDto.getPhone();
         this.nickname = memberDto.getNickname();
+    }
+
+    @Builder
+    public Member(String socialId, String userImage, SocialType socialType, String email, String phone, String nickname, Role role){
+        this.socialId = socialId;
+        this.userImage = userImage;
+        this.socialType = socialType;
+        this.email = email;
+        this.phone = phone;
+        this.nickname = nickname;
+        this.role = role;
     }
 }

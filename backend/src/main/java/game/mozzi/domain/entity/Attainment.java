@@ -1,17 +1,12 @@
 package game.mozzi.domain.entity;
 
 import game.mozzi.domain.BaseTimeEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Entity
 public class Attainment extends BaseTimeEntity {
 
@@ -29,4 +24,10 @@ public class Attainment extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "missionId")
     private Mission missionId;
+
+    @Builder
+    public Attainment(Long point){
+        this.point = point;
+    }
+
 }

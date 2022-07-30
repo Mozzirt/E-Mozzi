@@ -51,13 +51,13 @@ public class MemberController {
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
-    @GetMapping("/current-info")
+    @GetMapping("/detail")
     @ApiOperation(value = "유저정보조회",notes = "유저정보조회")
     public ResponseEntity<Message> findUserBySocialId(@SessionAttribute(name= SESSION_NAME, required = false) String socialId, Message msg){
         return getMemberResponseEntity(socialId, msg);
     }
 
-    @GetMapping("/info/{socialId}")
+    @GetMapping("/detail/{socialId}")
     @ApiOperation(value = "유저정보조회 (특정유저)",notes = "유저정보조회 (특정유저)")
     public ResponseEntity<Message> findUserByOtherSocialId(@PathVariable String socialId, Message msg){
         return getMemberResponseEntity(socialId, msg);
@@ -92,10 +92,10 @@ public class MemberController {
     }
 
     // 회원수정
-    @PutMapping("/info")
+    @PutMapping("/detail")
     public ResponseEntity<?> modifyUserInfo(@SessionAttribute(name= SESSION_NAME, required = false) String socialId, @Valid MemberDto memberDto, Message msg) {
-        Member userEntity = memberService.modifyInfo(socialId, memberDto);
-        msg.setMessage(StatusEnum.OK, CommonConstants.MZ_99_0001, userEntity);
+        String updateSocialId = memberService.modifyInfo(socialId, memberDto);
+        msg.setMessage(StatusEnum.OK, CommonConstants.MZ_99_0001, updateSocialId);
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 }
