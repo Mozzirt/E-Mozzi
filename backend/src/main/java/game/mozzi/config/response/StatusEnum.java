@@ -1,5 +1,10 @@
 package game.mozzi.config.response;
 
+/**
+ *  작성자 : beomchul.kim@lotte.com
+ *  Status Enum
+ */
+
 public enum StatusEnum {
     
     CONTINUE(100, "Continue"),

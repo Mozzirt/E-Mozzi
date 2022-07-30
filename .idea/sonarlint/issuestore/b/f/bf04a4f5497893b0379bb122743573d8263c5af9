@@ -1,0 +1,10 @@
+
+d
+java:S20954"NUse try-with-resources or close this "FileOutputStream" in a "finally" clause.(ıÃ¥é
+W	java:S8993"BDo something with the "boolean" value returned by "createNewFile".(á±œÜ
+A
+java:S1075C"&Remove this hard-coded path-delimiter.(¨Æ¦ùÿÿÿÿ
+i
+java:S4042P"NUse "java.nio.file.Files#delete" here for better messages on error conditions.(áéæ™ùÿÿÿÿ
+B
+java:S1144W",Remove this unused private "convert" method.(Î¼¶Æ
