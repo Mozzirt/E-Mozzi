@@ -1,4 +1,4 @@
-import 'asset/icon'
+import 'Assets/icon'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function Test() {
