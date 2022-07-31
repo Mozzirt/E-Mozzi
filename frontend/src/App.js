@@ -1,11 +1,13 @@
 import './App.css'
 import EMozzi from 'Routes/EMozzi'
 
+import { ChakraProvider } from '@chakra-ui/react'
+
 function App() {
   return (
-    <div>
+    <ChakraProvider>
       <EMozzi />
-    </div>
+    </ChakraProvider>
   )
 }
 
