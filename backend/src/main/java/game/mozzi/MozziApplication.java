@@ -24,8 +24,11 @@ public class MozziApplication {
 
 		try{
 
-			Member member = new Member();
-			member.setSocialId("TEST1");
+//			Member member = new Member();
+			Member member = Member.builder()
+					.socialId("TEST1")
+					.build();
+//			member.setSocialId("TEST1");
 			em.persist(member);
 
 			System.out.println(" ================= ");
