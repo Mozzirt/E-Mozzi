@@ -1,17 +1,14 @@
 package game.mozzi.domain.entity;
 
 import game.mozzi.domain.BaseTimeEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import game.mozzi.domain.entity.embedded.Role;
+import game.mozzi.domain.entity.embedded.SocialType;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Entity
 public class Mileage extends BaseTimeEntity {
 
@@ -25,4 +22,9 @@ public class Mileage extends BaseTimeEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "socialId")
     private Member member;
+
+    @Builder
+    public Mileage(String mileage){
+        this.mileage = mileage;
+    }
 }
