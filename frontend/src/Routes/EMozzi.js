@@ -8,6 +8,7 @@ class EMozzi extends Component {
         return (
             <Routes>
                 <Route exact path='/' element={<Home/>} />
+                <Route path='login' element={<Login />} />
             </Routes>
         )
     }
