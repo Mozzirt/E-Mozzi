@@ -15,6 +15,49 @@ class MyPage extends Component {
         }
     }
 
+    renderService = () => {
+        const service = [
+                {
+                    name: '이벤트',
+                    imgUrl: '/images/mypage/event.svg'
+                },
+                {
+                    name: '공지사항',
+                    imgUrl: '/images/mypage/notice.svg'
+                },
+                {
+                    name: '친목질',
+                    imgUrl: '/images/mypage/socializing.svg'
+                },
+                {
+                    name: '문의하기',
+                    imgUrl: '/images/mypage/ask.svg'
+                },
+                {
+                    name: '개발자들',
+                    imgUrl: '/images/mypage/developers.png'
+                },
+                {
+                    name: '설정',
+                    imgUrl: '/images/mypage/setting.svg'
+                },
+        ]
+
+        return service.map(service => {
+            return (
+                <div className="service-list">
+                    <div className="list-info">
+                        <img src={service.imgUrl} alt=''/>
+                        <div>{service.name}</div>
+                    </div>
+                    <div className="btn-area">
+                        <img src='/images/mypage/arrow.svg' alt='' />
+                    </div>
+                </div>
+            )
+        })
+    }
+
     render() {
         return (
             <div className="mypage-root-container">
@@ -47,6 +90,10 @@ class MyPage extends Component {
                         </div>
                     </div>
                     <div className="edit-btn">프로필 수정</div>
+                </div>
+                <div className="service-area">
+                    <div className="title">서비스</div>
+                    {this.renderService()}
                 </div>
             </div>
         )
