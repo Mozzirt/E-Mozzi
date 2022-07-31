@@ -5,6 +5,7 @@ import Home from 'Pages/Home/Home'
 import Search from 'Pages/Search/Search'
 import MyPage from 'Pages/MyPage/MyPage'
 import Login from 'Pages/Login/Login'
+import Test from 'Pages/Test/Test'
 
 class EMozzi extends Component {
     render() {
@@ -14,6 +15,7 @@ class EMozzi extends Component {
                 <Route path='/search' element={<Search/>} />
                 <Route path='/mypage' element={<MyPage/>} />
                 <Route path='login' element={<Login />} />
+                <Route path='test' element={<Test />} />
             </Routes>
         )
     }
