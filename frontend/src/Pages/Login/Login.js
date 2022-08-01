@@ -1,7 +1,7 @@
 import { Box, Flex, Text, Image, useDisclosure } from "@chakra-ui/react"
 
 
-// import Join from "../../page/Join"
+import Join from "../../page/Join"
 
 export default function Login() {
 
@@ -15,7 +15,7 @@ export default function Login() {
 
             <Box height="22px" bg="linear-gradient(180deg, rgba(196, 196, 196, 0) 0%, rgba(196, 196, 196, 0.063) 100%)"></Box>
 
-            {/* <Join isOpen={isOpen} onClose={onClose}/> */}
+            <Join isOpen={isOpen} onClose={onClose}/>
 
             <Box mt="44px" mb="25px">
                 <Image mb="1" src="image/login/kakao.svg" alt="kakao login" onClick={onOpen}></Image>
