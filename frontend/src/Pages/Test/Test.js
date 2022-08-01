@@ -13,7 +13,9 @@ import { Box,
          RadioGroup,
          Radio,
          Center,
+         useDisclosure
         } from "@chakra-ui/react"
+import BoardSetting from 'Pages/BoardSetting/BoardSetting';
 
 export default function Test() {
     const [url, setUrl] = React.useState('')
@@ -21,6 +23,8 @@ export default function Test() {
     const [method, setMethod] = React.useState('GET')
     const handleChange = (event) => setUrl(event.target.value)
     const handleInputChange = (event) => setParameter(event.target.value)
+
+    const { isOpen, onOpen, onClose } = useDisclosure()
 
     function apiCall() {
         const axiosOptions = {
@@ -60,8 +64,12 @@ export default function Test() {
                     <Input placeholder='URL' size='md' value={url} onChange={handleChange}/>
                     <Textarea placeholder='parameter' value={js_beautify(parameter)} onChange={handleInputChange}/>
                 </Box>
-                <Box bg='tomato'>
-                alert
+                <Box>
+                    <Box>
+                        <Text pl={3} pb={2} fontWeight={'bold'} display="inline-block">BoardSetting TEST</Text>
+                    </Box>
+                    <Button size={'sm'} colorScheme={'pink'} onClick={() => onOpen()}>BoardSetting Call!!</Button>
+                    <BoardSetting isOpen={isOpen} onClose={onClose}/>
                 </Box>
                 <Box bg='pink.100'>
                 tooltip
