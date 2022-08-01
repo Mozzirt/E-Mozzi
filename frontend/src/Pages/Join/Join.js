@@ -10,8 +10,6 @@ export default function Join(props) {
     }
 
     return (
-        <>
-        {/* <button onClick={onOpen}>실제로 호출 시는 join에 props로 onOpen을 호출해야함</button> */}
         <Drawer placement="bottom" onClose={onClose} isOpen={isOpen}>
             <DrawerOverlay bg='rgba(203, 203, 203, 0.71)'/>
             <DrawerContent  borderTopRadius="24px" 
@@ -65,6 +63,5 @@ export default function Join(props) {
                 </Box>
             </DrawerContent>
         </Drawer>
-        </>
     )
 }
