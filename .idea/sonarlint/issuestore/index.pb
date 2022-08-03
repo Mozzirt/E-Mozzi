@@ -9,8 +9,6 @@ k
 ;backend/src/main/java/game/mozzi/domain/BaseTimeEntity.java,4\a\4a131c29ef6e3c514e6a59041d79589cff180efd
 i
 9backend/src/main/java/game/mozzi/service/UserService.java,4\c\4cafeaf56fb1f5872a9f01ad786309f79fedec12
-f
-6backend/src/main/java/game/mozzi/config/Constants.java,5\6\56d63d003c1bcc2c799ef22d28d381ed29afa0e4
 m
 =backend/src/main/java/game/mozzi/config/filter/LogFilter.java,9\2\926da4db40a1a696e481abaea53d02b0ef6db6a2
 l
@@ -25,10 +23,6 @@ n
 >backend/src/main/java/game/mozzi/domain/question/Question.java,e\c\ecec05f38c0f59f8cdfc2bae6bfba4221e7ecd48
 r
 Bbackend/src/main/java/game/mozzi/domain/question/QuestionList.java,d\7\d7dd90ed744ce24450fccae580b4738890499aac
-G
-backend/settings.gradle,b\3\b329b210b93dd6d96e8198d55bd14bd3361ac708
-D
-backend/build.gradle,2\1\21d4b1ec4e3be89735ba8533a58eee07a372667a
 o
 ?backend/src/main/java/game/mozzi/controller/UserController.java,1\d\1d375807411ae49edbf6fdb3e1b2a4053185ae2a
 m
