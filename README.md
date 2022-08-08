@@ -2,7 +2,7 @@
 
 ## TDD 공부해와서 적용합시댜 ( 볼만한 글 추가부탁드림다 )
 - https://brunch.co.kr/@freeism/19
-- 
+- https://jongmin92.github.io/2020/03/31/Java/use-assertthat/
 
 
 ## 임시디자인
