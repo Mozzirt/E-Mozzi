@@ -4,6 +4,10 @@
 - https://brunch.co.kr/@freeism/19
 - https://jongmin92.github.io/2020/03/31/Java/use-assertthat/
 
+## TODO 
+- ELK 
+- EC2, RDS, S3
+- Redis ( Session )
 
 ## 임시디자인
 - https://www.figma.com/file/AqO2AhHxzqqHJYa4jZGIFh/%EC%9D%B4%EA%B1%B0%EB%AA%A8%EC%B0%8C
