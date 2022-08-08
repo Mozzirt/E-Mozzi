@@ -1,5 +1,10 @@
 ## 질문앱
 
+## TDD 공부해와서 적용합시댜 ( 볼만한 글 추가부탁드림다 )
+- https://brunch.co.kr/@freeism/19
+- 
+
+
 ## 임시디자인
 - https://www.figma.com/file/AqO2AhHxzqqHJYa4jZGIFh/%EC%9D%B4%EA%B1%B0%EB%AA%A8%EC%B0%8C
 
