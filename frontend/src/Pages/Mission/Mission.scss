@@ -1,0 +1,121 @@
+.mission-root-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100vw;
+    min-height: 100vh;
+
+    .mission-background {
+        position: absolute;
+        width: 100%;
+        height: 50%;
+        top: 40px;
+
+        img {
+            object-fit: fill;
+            width: 100%;
+        }
+    }
+
+    .mission-container {
+        position: absolute;
+        top: 16%;
+        width: 100%;
+
+        .mission-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            .count {
+                font-family: 'Jost';
+                font-weight: 500;
+                font-size: 48px;
+            }
+        
+            .title {
+                color: #7F8187;
+                font-family: 'Jost';
+                font-weight: 400;
+                font-size: 16px;
+                letter-spacing: 2px;
+                margin-top: 8px;
+            }
+        }
+    
+        .mission-des {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+    
+            .des {
+                font-weight: 400;
+                font-size: 15px;
+                color: #9B9B9B;
+    
+                span {
+                    font-weight: bold;
+                }
+            }
+        }
+    
+        .mission-body {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            
+            .mission-area {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+    
+                background: #D9D9D9;
+                box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+                border-radius: 15px;
+                width: 80%;
+                margin: 10px 0;
+                padding: 6px 15px;
+    
+                .mission-area-left {
+                    .mission-title {
+                        font-family: 'Jost';
+                        font-weight: 600;
+                        font-size: 17px;
+                    }
+                    
+                    .mission-des {
+                        font-family: 'Jost';
+                        font-weight: 400;
+                        font-size: 13px;
+                        color: #7F8187;
+                        margin-top: 6px;
+                    }
+                }
+    
+                .mission-area-right {
+                    img {
+                        filter: grayscale(100%);
+                    }
+                }
+    
+                &.active {
+                    background: #E1FAFF;
+    
+                    .mission-area-right {
+                        img {
+                            filter: grayscale(0%);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
